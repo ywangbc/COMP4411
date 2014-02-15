@@ -5,9 +5,11 @@
 // will look like the file with the different GL primitive calls.
 //
 
+
 #include "impressionistDoc.h"
 #include "impressionistUI.h"
 #include "LineBrush.h"
+
 
 extern float frand();
 
@@ -21,11 +23,13 @@ void LineBrush::BrushBegin( const Point source, const Point target )
 	ImpressionistDoc* pDoc = GetDocument();
 	ImpressionistUI* dlg=pDoc->m_pUI;
 
-	int size = pDoc->getSize();
+	int width = pDoc->getLineWidth();
+	//int angle = pDoc->getLineAngle();
 
 
 
-	glPointSize( (float)size );
+	glLineWidth( width );
+	
 
 	BrushMove( source, target );
 }
@@ -40,7 +44,7 @@ void LineBrush::BrushMove( const Point source, const Point target )
 		return;
 	}
 
-	glBegin( GL_POINTS );
+	glBegin( GL_LINES );
 		SetColor( source );
 
 		glVertex2d( target.x, target.y );

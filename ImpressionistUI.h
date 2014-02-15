@@ -38,6 +38,11 @@ public:
 	Fl_Choice*			m_BrushTypeChoice;
 
 	Fl_Slider*			m_BrushSizeSlider;
+	//ADDED BY RYAN STARTED
+	Fl_Slider*			m_LineWidthSlider;
+	Fl_Slider*			m_LineAngleSlider;
+	Fl_Slider*			m_AlphaSlider;
+	//ADDED BY RYAN ENDED
 	Fl_Button*          m_ClearCanvasButton;
 
 	// Member functions
@@ -50,16 +55,31 @@ public:
 	// Interface to get attribute
 
 	int					getSize();
+	//Added By Ryan STARTED
+	int					getLineWidth();
+	int					getLineAngle();
+	double				getAlpha();
+	//Added By Ryan ENDED
+
+
 	void				setSize(int size);
+	//Added By Ryan STARTED
+	void				setLineWidth(int width);
+	void				setLineAngle(int angle);
+	void				setAlpha(double Alpha);
+	//Added By Ryan ENDED
 
 private:
 	ImpressionistDoc*	m_pDoc;		// pointer to document to communicate with the document
 
 	// All attributes here
 	int		m_nSize;
+	//Added By Ryan Started
 	int m_nLine_width;
 	int m_nLine_angle;
 	double m_nAlpha;
+	//Added By Ryan Ended 
+
 
 	// Static class members
 	static Fl_Menu_Item		menuitems[];

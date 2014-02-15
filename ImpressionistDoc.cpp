@@ -90,6 +90,27 @@ int ImpressionistDoc::getSize()
 	return m_pUI->getSize();
 }
 
+//ADDED BY RYAN STARTED
+//---------------------------------------------------------
+//Return the width of the line
+//---------------------------------------------------------
+int ImpressionistDoc::getLineWidth()
+{
+	return m_pUI->getLineWidth();
+}
+
+int ImpressionistDoc::getLineAngle()
+{
+	return m_pUI->getLineAngle();
+}
+
+double ImpressionistDoc::getAlpha()
+{
+	return m_pUI->getAlpha();
+}
+
+//ADDED BY RYAN ENDED
+
 //---------------------------------------------------------
 // Load the specified image
 // This is called by the UI when the load image button is 
