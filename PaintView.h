@@ -52,6 +52,10 @@ private:
 			m_nWindowWidth, 
 			m_nWindowHeight;
 
+	//ADDED BY RYAN START
+	Point fixPoint;   //the starting point when left button licked
+	//ADDED BY RYAN END
+
 };
 
 #endif

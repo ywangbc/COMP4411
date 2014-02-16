@@ -4,12 +4,14 @@
 // The code maintaining the painting view of the input images
 //
 
+#include <cmath>
 #include "impressionist.h"
 #include "impressionistDoc.h"
 #include "impressionistUI.h"
 #include "paintview.h"
 #include "ImpBrush.h"
 
+const double PI=3.1415927;
 
 #define LEFT_MOUSE_DOWN		1
 #define LEFT_MOUSE_DRAG		2
@@ -117,15 +119,56 @@ void PaintView::draw()
 			RestoreContent();
 			break;
 		case RIGHT_MOUSE_DOWN:
-
+			fixPoint=target;   //Define the initial fixPoint to create the effect
 			break;
 		case RIGHT_MOUSE_DRAG:
+		{
+			glDrawBuffer(GL_BACK);  //Change the drawing buffer to back buffer.
+			glLineWidth(1);
+
+			glBegin( GL_LINES );
+			glColor3f(1.0f, 0.0f, 0.0f);
+			glVertex2d(fixPoint.x, fixPoint.y);
+			glVertex2d(target.x, target.y);
+			glEnd();
 
 			break;
+		}
 		case RIGHT_MOUSE_UP:
+		{
+			RestoreContent();
 
+			double xDist=target.x-fixPoint.x;
+			double yDist=target.y-fixPoint.y;
+			//Set the angle of Line
+			if(xDist==0)
+			{
+				m_pDoc->setLineAngle(90);
+			}
+			else
+			{
+				double tanV=yDist/xDist;
+				int angle=(atan2(yDist,xDist)/(2*PI)*360);
+				m_pDoc->setLineAngle(angle);
+			}
+
+			//Set the size of line
+			double dist;
+			double tempDist=sqrt(xDist*xDist+yDist*yDist);
+			if(tempDist<=1) 
+			{
+				dist=1;
+				m_pDoc->setSize(1);
+			}
+			else
+			{
+				dist=(int)(tempDist + 0.5);
+				m_pDoc->setSize(dist);
+			}
+
+			glClear(GL_BACK);
 			break;
-
+		}
 		default:
 			printf("Unknown event!!\n");		
 			break;

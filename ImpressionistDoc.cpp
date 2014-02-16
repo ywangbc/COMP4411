@@ -109,6 +109,26 @@ double ImpressionistDoc::getAlpha()
 	return m_pUI->getAlpha();
 }
 
+//Set the attributes of Brushes
+void ImpressionistDoc::setSize(int size)
+{
+	m_pUI->setSize(size);
+}
+void ImpressionistDoc::setLineWidth(int width)
+{
+	m_pUI->setLineWidth(width);
+}
+
+void ImpressionistDoc::setLineAngle(int angle)
+{
+	m_pUI->setLineAngle(angle);
+}
+
+void ImpressionistDoc::setAlpha(double alpha)
+{
+	m_pUI->setAlpha(alpha);
+}
+
 //ADDED BY RYAN ENDED
 
 //---------------------------------------------------------
