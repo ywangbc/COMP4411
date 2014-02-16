@@ -8,9 +8,10 @@
 
 #include "impressionistDoc.h"
 #include "impressionistUI.h"
+#include <cmath>
 #include "LineBrush.h"
 
-
+const double PI=3.1415927;
 extern float frand();
 
 LineBrush::LineBrush( ImpressionistDoc* pDoc, char* name ) :
@@ -23,13 +24,11 @@ void LineBrush::BrushBegin( const Point source, const Point target )
 	ImpressionistDoc* pDoc = GetDocument();
 	ImpressionistUI* dlg=pDoc->m_pUI;
 
-	int width = pDoc->getLineWidth();
-	//int angle = pDoc->getLineAngle();
+	int size = pDoc->getSize();
 
 
 
-	glLineWidth( width );
-	
+	glPointSize(size);
 
 	BrushMove( source, target );
 }
@@ -43,12 +42,30 @@ void LineBrush::BrushMove( const Point source, const Point target )
 		printf( "PointBrush::BrushMove  document is NULL\n" );
 		return;
 	}
+	//Processing LineWidth STARTED
+	int width=GetDocument()->getLineWidth();
+	double halfWidth=width/2.0;   //converted to double in case width is 1
+	//Processing LineWIdth ENDED
 
-	glBegin( GL_LINES );
+	//Processsing LineLength STARTED
+	int length;
+	glGetIntegerv(GL_POINT_SIZE ,&length);
+	double halfLength = length/2.0;  //Need to be converted to double. Or nothing will be drawn when length is 1
+	//Processing LineLength ENDED
+	
+	//Processing LineAngle STARTED
+	int angle = GetDocument()->getLineAngle();
+	double mathAngle=(angle%360)/360.0*2*PI;
+	double cosV=cos(mathAngle);
+	double sinV=sin(mathAngle);
+	//Processing LineAngle ENDED
+
+	glBegin( GL_POLYGON );
 		SetColor( source );
-
-		glVertex2d( target.x, target.y );
-
+		glVertex2d( target.x-halfLength*cosV-halfWidth*sinV, target.y-halfLength*sinV+halfWidth*cosV);
+		glVertex2d( target.x-halfLength*cosV+halfWidth*sinV, target.y-halfLength*sinV-halfWidth*cosV);
+		glVertex2d( target.x+halfLength*cosV+halfWidth*sinV, target.y+halfLength*sinV-halfWidth*cosV);
+		glVertex2d( target.x+halfLength*cosV-halfWidth*sinV, target.y+halfLength*sinV+halfWidth*cosV);
 	glEnd();
 }
 

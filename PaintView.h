@@ -30,6 +30,15 @@ public:
 
 	void RestoreContent();
 
+	//ADDED BY RYAN STARTED
+	//To access the private members of paint view
+	//Will be used in controlling out of border condition
+	int GetStartRow();
+	int GetEndRow();
+	int GetStartCol();
+	int GetEndCol();
+	int GetDrawHeight();
+	//ADDED BY RYAN ENDED
 	ImpressionistDoc *m_pDoc;
 
 private:

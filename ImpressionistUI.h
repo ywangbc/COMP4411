@@ -112,9 +112,7 @@ private:
 	//Brush Dialog->alpha
 	static void cb_alphaSlides(Fl_Widget* o, void* v);
 
-
-
-	//Added By Ryan Ended
+	//Added By Ryan ENDED
 	//Callbacks for Brush Dialog ENDED
 	
 	//Added By Ryan STARTED (File)

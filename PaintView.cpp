@@ -240,3 +240,26 @@ void PaintView::RestoreContent()
 
 //	glDrawBuffer(GL_FRONT);
 }
+
+int PaintView::GetStartRow()
+{
+	return m_nStartRow;
+}
+
+
+int PaintView::GetEndRow()
+{
+	return m_nEndRow;
+}
+int PaintView::GetStartCol()
+{
+	return m_nStartCol;
+}
+int PaintView::GetEndCol()
+{
+	return m_nEndCol;
+}
+int PaintView::GetDrawHeight()
+{
+	return m_nDrawHeight;
+}

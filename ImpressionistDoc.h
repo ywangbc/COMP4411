@@ -36,7 +36,7 @@ public:
 	void	setSize(int size);				// set the UI size
 	//ADDED BY RYAN STARTED
 	void	setLineWidth(int width);
-	void	setLineAngle(int aangle);
+	void	setLineAngle(int angle);
 	void	setAlpha(double angle);
 	//ADDED BY RYAN ENDED
 	char*	getImageName();					// get the current image name

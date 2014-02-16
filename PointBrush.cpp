@@ -40,10 +40,43 @@ void PointBrush::BrushMove( const Point source, const Point target )
 		return;
 	}
 
+	int windowH=dlg->m_mainWindow->h();
+	int drawHeight=dlg->m_paintView->GetDrawHeight();
+
+	int startCol=dlg->m_paintView->GetStartCol();
+	int endCol=dlg->m_paintView->GetEndCol();
+	int startRow=dlg->m_paintView->GetStartRow()+windowH-drawHeight-25;
+	int endRow=startRow+drawHeight;
+
+	
+	int x=target.x;
+	int y=target.y;
+
+	
+
+	if(x<startCol)
+	{
+		x=startCol;
+	}
+	if(x>endCol)
+	{
+		x=endCol;
+	}
+	if(y<startRow)
+	{
+		y=startRow;
+	}
+	if(y>endRow)
+	{
+		y=endRow;
+	}
+
+
+
 	glBegin( GL_POINTS );
 		SetColor( source );
 
-		glVertex2d( target.x, target.y );
+		glVertex2d(x, y );
 
 	glEnd();
 }
