@@ -59,13 +59,42 @@ void LineBrush::BrushMove( const Point source, const Point target )
 	double cosV=cos(mathAngle);
 	double sinV=sin(mathAngle);
 	//Processing LineAngle ENDED
+	int windowH=dlg->m_mainWindow->h();
+	int drawHeight=dlg->m_paintView->GetDrawHeight();
+
+	int startCol=dlg->m_paintView->GetStartCol();
+	int endCol=dlg->m_paintView->GetEndCol();
+	int startRow=dlg->m_paintView->GetStartRow()+windowH-drawHeight-25;
+	int endRow=startRow+drawHeight;
+
+	double axis[8];
+	axis[0]=target.x-halfLength*cosV-halfWidth*sinV;
+	axis[1]=target.y-halfLength*sinV+halfWidth*cosV;
+	axis[2]=target.x-halfLength*cosV+halfWidth*sinV;
+	axis[3]=target.y-halfLength*sinV-halfWidth*cosV;
+	axis[4]=target.x+halfLength*cosV+halfWidth*sinV;
+	axis[5]=target.y+halfLength*sinV-halfWidth*cosV;
+	axis[6]=target.x+halfLength*cosV-halfWidth*sinV;
+	axis[7]=target.y+halfLength*sinV+halfWidth*cosV;
+
+
+	for(int i=0;i<8;i+=2)
+	{
+		if(axis[i]<startCol) axis[i]=startCol;
+		if(axis[i]>endCol) axis[i]=endCol;
+	}
+	for(int i=1;i<8;i+=2)
+	{
+		if(axis[i]<startRow) axis[i]=startRow;
+		if(axis[i]>endRow) axis[i]=endRow;
+	}
 
 	glBegin( GL_POLYGON );
 		SetColor( source );
-		glVertex2d( target.x-halfLength*cosV-halfWidth*sinV, target.y-halfLength*sinV+halfWidth*cosV);
-		glVertex2d( target.x-halfLength*cosV+halfWidth*sinV, target.y-halfLength*sinV-halfWidth*cosV);
-		glVertex2d( target.x+halfLength*cosV+halfWidth*sinV, target.y+halfLength*sinV-halfWidth*cosV);
-		glVertex2d( target.x+halfLength*cosV-halfWidth*sinV, target.y+halfLength*sinV+halfWidth*cosV);
+		glVertex2d( axis[0], axis[1]);
+		glVertex2d( axis[2], axis[3]);
+		glVertex2d( axis[4], axis[5]);
+		glVertex2d( axis[6], axis[7]);
 	glEnd();
 }
 
