@@ -123,15 +123,17 @@ void PaintView::draw()
 			break;
 		case RIGHT_MOUSE_DRAG:
 		{
-			glDrawBuffer(GL_BACK);  //Change the drawing buffer to back buffer.
+			//Clear up the content before the next movement start
+			RestoreContent();
+
+			//glDrawBuffer(GL_BACK);  //Change the drawing buffer to back buffer.
 			glLineWidth(1);
 
 			glBegin( GL_LINES );
-			glColor3f(1.0f, 0.0f, 0.0f);
-			glVertex2d(fixPoint.x, fixPoint.y);
-			glVertex2d(target.x, target.y);
+				glColor3f(1.0f, 0.0f, 0.0f);
+				glVertex2d(fixPoint.x, fixPoint.y);
+				glVertex2d(target.x, target.y);
 			glEnd();
-
 			break;
 		}
 		case RIGHT_MOUSE_UP:
@@ -268,7 +270,7 @@ void PaintView::SaveCurrentContent()
 
 void PaintView::RestoreContent()
 {
-	glDrawBuffer(GL_BACK);
+	//glDrawBuffer(GL_FRONT_AND_BACK);
 
 	glClear( GL_COLOR_BUFFER_BIT );
 
