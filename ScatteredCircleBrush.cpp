@@ -40,12 +40,30 @@ void ScatteredCircleBrush::BrushMove( const Point source, const Point target )
 		return;
 	}
 
-	glBegin( GL_POINTS );
-		SetColor( source );
+	int length;
+	glGetIntegerv(GL_POINT_SIZE ,&length);
+	double halfLength=length/2.0;
+	double startXS=source.x-halfLength;
+	double startYS=source.y-halfLength;
+	double startXT=target.x-halfLength;
+	double startYT=target.y-halfLength;
 
-		glVertex2d( target.x, target.y );
 
-	glEnd();
+	for(int i=0;i<length;i++)
+		for(int j=0;j<length;j++)
+		{
+			Point newS=Point(startXS+i,startYS+j);
+			Point newT=Point(startXT+i,startYT+j);
+			if(dist(newT,target)>halfLength)
+			{
+				continue;
+			}
+			int seed = rand()%50;
+			if(seed<1) 
+			{
+				ImpBrush::c_pBrushes[BRUSH_CIRCLES]->BrushMove(newS, newT);
+			}
+		}
 }
 
 void ScatteredCircleBrush::BrushEnd( const Point source, const Point target )

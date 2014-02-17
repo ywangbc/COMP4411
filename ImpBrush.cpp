@@ -52,3 +52,10 @@ void ImpBrush::SetColor (const Point source)
 	glColor3ubv( color );
 
 }
+
+double ImpBrush::dist(Point a, Point b)
+{
+	double xDist=a.x-b.x;;
+	double yDist=a.y-b.y;
+	return sqrt(xDist*xDist+yDist*yDist);
+}
