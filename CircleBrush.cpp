@@ -52,14 +52,31 @@ void CircleBrush::BrushMove( const Point source, const Point target )
 	glGetIntegerv(GL_POINT_SIZE ,&diam);
 	double radius=diam/2.0;
 
+	int windowH=dlg->m_mainWindow->h();
+	int drawHeight=dlg->m_paintView->GetDrawHeight();
+
+	int startCol=dlg->m_paintView->GetStartCol();
+	int endCol=dlg->m_paintView->GetEndCol();
+	int startRow=dlg->m_paintView->GetStartRow()+windowH-drawHeight-25;
+	int endRow=startRow+drawHeight;
+
 	glBegin(GL_TRIANGLE_FAN);
 		SetColor( source );
 		glVertex2f(x, y); // center of circle
 		for(int i = 0; i <= triangles;i++) { 
-			glVertex2f(
-		        x + (radius * cos(i * twoPi / triangles)), 
-			    y + (radius * sin(i * twoPi / triangles))
-			);
+
+
+
+			double xNew=x + (radius * cos(i * twoPi / triangles));
+			double yNew=y + (radius * sin(i * twoPi / triangles));
+
+			if(xNew<startCol||xNew>endCol||yNew<startRow||yNew>endRow)
+			{
+				xNew=x;
+				yNew=y;
+			}
+
+			glVertex2f(xNew, yNew);
 		}
 	glEnd();
 }
