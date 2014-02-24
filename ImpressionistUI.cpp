@@ -341,7 +341,7 @@ void ImpressionistUI::cb_line_angleSlides(Fl_Widget* o, void* v)
 //Called by the UI when the size of slider is moved
 void ImpressionistUI::cb_alphaSlides(Fl_Widget* o, void* v)
 {
-
+	((ImpressionistUI*)(o->user_data()))->m_nAlpha=double(((Fl_Slider *)o)->value());
 }
 //Added By Ryan ENDED
 
@@ -437,13 +437,7 @@ void ImpressionistUI::setLineAngle(int angle)
 	m_LineAngleSlider->value(m_nLine_angle);
 }
 
-void ImpressionistUI::setAlpha(double alpha)
-{
-	m_nAlpha=alpha;
 
-	if (alpha<=1&&alpha>=0)
-		m_AlphaSlider->value(alpha);
-}
 
 
 //ADDED BY RYAN ENDED
@@ -608,7 +602,7 @@ ImpressionistUI::ImpressionistUI() {
         m_AlphaSlider->labelfont(FL_COURIER);
         m_AlphaSlider->labelsize(12);
 		m_AlphaSlider->minimum(0.00);
-		m_AlphaSlider->maximum(1.);
+		m_AlphaSlider->maximum(1);
 		m_AlphaSlider->step(0.01);
 		m_AlphaSlider->value(m_nAlpha);
 		m_AlphaSlider->align(FL_ALIGN_RIGHT);

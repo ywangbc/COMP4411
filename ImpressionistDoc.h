@@ -9,6 +9,7 @@
 
 #include "impressionist.h"
 #include "bitmap.h"
+#include <cstdlib>
 
 class ImpressionistUI;
 
@@ -37,7 +38,6 @@ public:
 	//ADDED BY RYAN STARTED
 	void	setLineWidth(int width);
 	void	setLineAngle(int angle);
-	void	setAlpha(double angle);
 	//ADDED BY RYAN ENDED
 	char*	getImageName();					// get the current image name
 	
@@ -69,6 +69,11 @@ public:
 	// Get the color of the original picture at the specified point	
 	GLubyte* GetOriginalPixel( const Point p );  
 
+	//ADDED BY RYAN START
+		//Return RGB and alpha
+	//GLubyte* GetOriginalPixelAlpha( int x, int y );
+	//GLubyte* GetOriginalPixelAlpha( const Point p );
+	//ADDED BY RYAN END
 
 private:
 	char			m_imageName[256];

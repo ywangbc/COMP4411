@@ -12,6 +12,8 @@
 int			ImpBrush::c_nBrushCount	= 0;
 ImpBrush**	ImpBrush::c_pBrushes	= NULL;
 
+const unsigned long RANGE=2*2*2*2*2*2*2*2-1;
+
 ImpBrush::ImpBrush(ImpressionistDoc*	pDoc, 
 				   char*				name) :
 					m_pDoc(pDoc), 
@@ -43,16 +45,51 @@ char* ImpBrush::BrushName(void)
 void ImpBrush::SetColor (const Point source)
 {
 	ImpressionistDoc* pDoc = GetDocument();
-
-
-	GLubyte color[3];
-
+	GLubyte color[4];
+	// glBlendFunc(GL_ZERO, GL_SRC1_ALPHA);
 	memcpy ( color, pDoc->GetOriginalPixel( source ), 3 );
- 
-	glColor3ubv( color );
-
+	double alpha=GetDocument()->getAlpha();
+	color[3]=GLubyte(alpha*RANGE);
+	glColor4ubv( color );
 }
+//ADDED BY RYAN START
+/*
+void ImpBrush::SetColorAlpha(const Point source)
+{
+	ImpressionistDoc* pDoc = GetDocument();
 
+	//R,G,B,Alpha
+	GLubyte color[4];
+
+	memcpy(color, pDoc->GetOriginalPixel(source),3);
+
+	double alpha=GetDocument()->getAlpha();
+	color[3]=GLubyte(alpha*RANGE);
+
+	//printf("color[0] is %d \n", color[0]);
+	//printf("color[1] is %d \n", color[1]);
+	//printf("color[2] is %d \n", color[2]);
+	//printf("color[3] is %d \n", color[3]);
+
+	//glClear(GL_COLOR_BUFFER_BIT);
+	//glEnable (GL_BLEND);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); 
+	glColor4ubv(color);
+
+	GLfloat colorNow[4];
+	glGetFloatv(GL_CURRENT_COLOR, colorNow);
+
+	for(int i=0;i<4;i++)
+	{
+		printf("colorNow[%d] is %f \n",i,colorNow[i]);
+	}
+	glFlush();
+}
+*/
+
+
+
+//ADDED BY RYAN END
 double ImpBrush::dist(Point a, Point b)
 {
 	double xDist=a.x-b.x;;

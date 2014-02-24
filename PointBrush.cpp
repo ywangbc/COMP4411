@@ -5,6 +5,7 @@
 // will look like the file with the different GL primitive calls.
 //
 
+#include <iostream>
 #include "impressionistDoc.h"
 #include "impressionistUI.h"
 #include "pointbrush.h"
@@ -73,10 +74,16 @@ void PointBrush::BrushMove( const Point source, const Point target )
 
 
 
+
 	glBegin( GL_POINTS );
-		SetColor( source );
+
+		//GLfloat pixels[4];
+		//glReadPixels(source.x,source.y,1,1,GL_RGBA,GL_FLOAT,&pixels);
+		//glColor4fv(pixels);
+		SetColor(source);
 
 		glVertex2d(x, y );
+
 
 	glEnd();
 }

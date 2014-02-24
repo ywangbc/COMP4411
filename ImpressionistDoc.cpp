@@ -131,10 +131,6 @@ void ImpressionistDoc::setLineAngle(int angle)
 	m_pUI->setLineAngle(angle);
 }
 
-void ImpressionistDoc::setAlpha(double alpha)
-{
-	m_pUI->setAlpha(alpha);
-}
 
 //ADDED BY RYAN ENDED
 
@@ -245,6 +241,7 @@ GLubyte* ImpressionistDoc::GetOriginalPixel( int x, int y )
 	return (GLubyte*)(m_ucBitmap + 3 * (y*m_nWidth + x));
 }
 
+
 //----------------------------------------------------------------
 // Get the color of the pixel in the original image at point p
 //----------------------------------------------------------------
@@ -252,4 +249,25 @@ GLubyte* ImpressionistDoc::GetOriginalPixel( const Point p )
 {
 	return GetOriginalPixel( p.x, p.y );
 }
+/*
+GLubyte* ImpressionistDoc::GetOriginalPixelAlpha( int x, int y )
+{
+	if ( x < 0 ) 
+		x = 0;
+	else if ( x >= m_nWidth ) 
+		x = m_nWidth-1;
 
+	if ( y < 0 ) 
+		y = 0;
+	else if ( y >= m_nHeight ) 
+		y = m_nHeight-1;
+
+	return (GLubyte*)(m_ucBitmap + 4 * (y*m_nWidth + x));
+}
+
+
+GLubyte* ImpressionistDoc::GetOriginalPixelAlpha(const Point p)
+{
+	return GetOriginalPixelAlpha(p.x,p.y);
+}
+*/
