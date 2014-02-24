@@ -230,6 +230,23 @@ void ImpressionistUI::cb_exit(Fl_Menu_* o, void* v)
 
 }
 
+//------------------------------------------------------------
+// Swaps the paintview canvas.
+// Called by the UI when the swap canvas menu item is chosen
+//------------------------------------------------------------
+void ImpressionistUI::cb_swap_canvas(Fl_Menu_* o, void* v)
+{
+	ImpressionistDoc* pDoc=whoami(o)->getDocument();
+
+	unsigned char* m_tmp = pDoc->m_ucBitmap;
+
+	pDoc->m_ucBitmap = pDoc->m_ucPainting;
+	pDoc->m_ucPainting = m_tmp;
+
+	pDoc->m_pUI->m_origView->refresh();
+	pDoc->m_pUI->m_paintView->refresh();
+}
+
 //Added By Ryan Started ( File)
 void ImpressionistUI::cb_colors(Fl_Menu_* o, void* v)
 {
@@ -447,6 +464,7 @@ Fl_Menu_Item ImpressionistUI::menuitems[] = {
 		{ "&Load Image...",	FL_ALT + 'l', (Fl_Callback *)ImpressionistUI::cb_load_image },
 		{ "&Save Image...",	FL_ALT + 's', (Fl_Callback *)ImpressionistUI::cb_save_image },
 		{ "&Brushes...",	FL_ALT + 'b', (Fl_Callback *)ImpressionistUI::cb_brushes }, 
+		{ "S&wap Canvas", FL_ALT + 'w', (Fl_Callback *)ImpressionistUI::cb_swap_canvas },
 		{ "&Clear Canvas", FL_ALT + 'c', (Fl_Callback *)ImpressionistUI::cb_clear_canvas, 0, FL_MENU_DIVIDER },
 	//Added By Ryan Started (File)
 		{ "Colors", FL_ALT+'k',(Fl_Callback *)ImpressionistUI::cb_colors},
