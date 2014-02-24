@@ -15,6 +15,9 @@
 #include <FL/Fl_Choice.H>
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Light_Button.H>
+#include <FL/Fl_Color_Chooser.H>
+#include <FL/Fl_Float_Input.H>
+#include <cstdlib>
 
 #include "Impressionist.h"
 #include "OriginalView.h"
@@ -66,7 +69,6 @@ public:
 	//Added By Ryan STARTED
 	void				setLineWidth(int width);
 	void				setLineAngle(int angle);
-	void				setAlpha(double Alpha);
 	//Added By Ryan ENDED
 
 private:
