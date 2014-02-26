@@ -7,6 +7,7 @@
 #ifndef LINEBRUSH_H
 #define LINEBRUSH_H
 
+#include <cmath>
 #include "ImpBrush.h"
 
 class LineBrush : public ImpBrush
