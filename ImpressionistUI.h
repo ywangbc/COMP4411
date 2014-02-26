@@ -55,6 +55,7 @@ public:
 	Fl_Slider*			m_rColorSlider;
 	Fl_Slider*			m_gColorSlider;
 	Fl_Slider*			m_bColorSlider;
+	Fl_Slider*			m_brightnessColorSlider;
 	/* (Tim) Color Dialog [END] */
 
 	// Member functions
@@ -77,6 +78,7 @@ public:
 	double				getRColor();
 	double				getGColor();
 	double				getBColor();
+	double				getBrightnessColor();
 	/* (Tim) Color Dialog [END] */
 
 
@@ -101,6 +103,7 @@ private:
 	double m_nRColor;
 	double m_nGColor;
 	double m_nBColor;
+	double m_nBrightnessColor;
 	/* (Tim) Color Dialog [START] */
 
 
@@ -150,6 +153,7 @@ private:
 	static void cb_rColorSlides(Fl_Widget* o, void* v);
 	static void cb_gColorSlides(Fl_Widget* o, void* v);
 	static void cb_bColorSlides(Fl_Widget* o, void* v);
+	static void cb_brightnessColorSlides(Fl_Widget* o, void* v);
 	/* (Tim) Color Dialog [END] */
 	
 	//Added By Ryan STARTED (File)

@@ -41,6 +41,7 @@ public:
 	double	getRColor();
 	double	getGColor();
 	double	getBColor();
+	double	getBrightnessColor();
 	/* (Tim) Color Dialog [END] */
 
 	void	setSize(int size);				// set the UI size

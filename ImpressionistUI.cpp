@@ -380,17 +380,40 @@ void ImpressionistUI::cb_alphaSlides(Fl_Widget* o, void* v)
 //Update the R channel
 void ImpressionistUI::cb_rColorSlides(Fl_Widget* o, void* v)
 {
-	((ImpressionistUI*)(o->user_data()))->m_nRColor = double(((Fl_Slider *)o)->value())/255.0;
+	double brightness = ((ImpressionistUI*)(o->user_data()))->m_nBrightnessColor;
+
+	((ImpressionistUI*)(o->user_data()))->m_nRColor = (double(((Fl_Slider *)o)->value())/brightness)/255.0;
 }
 //Update the G channel
 void ImpressionistUI::cb_gColorSlides(Fl_Widget* o, void* v)
 {
-	((ImpressionistUI*)(o->user_data()))->m_nGColor = double(((Fl_Slider *)o)->value())/255.0;
+	double brightness = ((ImpressionistUI*)(o->user_data()))->m_nBrightnessColor;
+
+	((ImpressionistUI*)(o->user_data()))->m_nGColor = (double(((Fl_Slider *)o)->value())/brightness)/255.0;
 }
 //Update the B channel
 void ImpressionistUI::cb_bColorSlides(Fl_Widget* o, void* v)
 {
-	((ImpressionistUI*)(o->user_data()))->m_nBColor = double(((Fl_Slider *)o)->value())/255.0;
+	double brightness = ((ImpressionistUI*)(o->user_data()))->m_nBrightnessColor;
+
+	((ImpressionistUI*)(o->user_data()))->m_nBColor = (double(((Fl_Slider *)o)->value())/brightness)/255.0;
+}
+//Update the Brightness
+void ImpressionistUI::cb_brightnessColorSlides(Fl_Widget* o, void* v)
+{
+	double brightness = ((ImpressionistUI*)(o->user_data()))->m_nBrightnessColor = ((Fl_Slider *)o)->value();
+
+	// get the RGB values
+	double rColor = ((ImpressionistUI*)(o->user_data()))->m_nRColor;
+	double gColor = ((ImpressionistUI*)(o->user_data()))->m_nGColor;
+	double bColor = ((ImpressionistUI*)(o->user_data()))->m_nBColor;
+	// change RGB sliders' maximums and values
+	((ImpressionistUI*)(o->user_data()))->m_rColorSlider->maximum(int(255*brightness));
+	((ImpressionistUI*)(o->user_data()))->m_rColorSlider->value(int(255*rColor*brightness));
+	((ImpressionistUI*)(o->user_data()))->m_gColorSlider->maximum(int(255*brightness));
+	((ImpressionistUI*)(o->user_data()))->m_gColorSlider->value(int(255*gColor*brightness));
+	((ImpressionistUI*)(o->user_data()))->m_bColorSlider->maximum(int(255*brightness));
+	((ImpressionistUI*)(o->user_data()))->m_bColorSlider->value(int(255*bColor*brightness));
 }
 /* (Tim) Color Dialog [END] */
 
@@ -473,6 +496,11 @@ double ImpressionistUI::getGColor()
 double ImpressionistUI::getBColor()
 {
 	return m_nBColor;
+}
+
+double ImpressionistUI::getBrightnessColor()
+{
+	return m_nBrightnessColor;
 }
 /* (Tim) Color Dialog [END] */
 
@@ -617,6 +645,7 @@ ImpressionistUI::ImpressionistUI() {
 	m_nRColor = 1.0;
 	m_nGColor = 1.0;
 	m_nBColor = 1.0;
+	m_nBrightnessColor = 1.0;
 	/* (Tim) Color Dialog [END] */
 	// init values ENDED
 
@@ -712,9 +741,9 @@ ImpressionistUI::ImpressionistUI() {
         m_rColorSlider->labelfont(FL_COURIER);
         m_rColorSlider->labelsize(12);
 		m_rColorSlider->minimum(0);
-		m_rColorSlider->maximum(255);
+		m_rColorSlider->maximum(int(255*m_nBrightnessColor));
 		m_rColorSlider->step(1);
-		m_rColorSlider->value(255*m_nRColor);
+		m_rColorSlider->value(int(255*m_nRColor*m_nBrightnessColor));
 		m_rColorSlider->align(FL_ALIGN_RIGHT);
 		m_rColorSlider->callback(cb_rColorSlides);
 
@@ -724,9 +753,9 @@ ImpressionistUI::ImpressionistUI() {
         m_gColorSlider->labelfont(FL_COURIER);
         m_gColorSlider->labelsize(12);
 		m_gColorSlider->minimum(0);
-		m_gColorSlider->maximum(255);
+		m_gColorSlider->maximum(int(255*m_nBrightnessColor));
 		m_gColorSlider->step(1);
-		m_gColorSlider->value(255*m_nGColor);
+		m_gColorSlider->value(int(255*m_nGColor*m_nBrightnessColor));
 		m_gColorSlider->align(FL_ALIGN_RIGHT);
 		m_gColorSlider->callback(cb_gColorSlides);
 
@@ -736,11 +765,23 @@ ImpressionistUI::ImpressionistUI() {
         m_bColorSlider->labelfont(FL_COURIER);
         m_bColorSlider->labelsize(12);
 		m_bColorSlider->minimum(0);
-		m_bColorSlider->maximum(255);
+		m_bColorSlider->maximum(int(255*m_nBrightnessColor));
 		m_bColorSlider->step(1);
-		m_bColorSlider->value(255*m_nBColor);
+		m_bColorSlider->value(int(255*m_nBColor*m_nBrightnessColor));
 		m_bColorSlider->align(FL_ALIGN_RIGHT);
 		m_bColorSlider->callback(cb_bColorSlides);
+
+		m_brightnessColorSlider = new Fl_Value_Slider(10, 100, 300, 20, "Brightness");
+		m_brightnessColorSlider->user_data((void*)(this));	// record self to be used by static callback functions
+		m_brightnessColorSlider->type(FL_HOR_NICE_SLIDER);
+        m_brightnessColorSlider->labelfont(FL_COURIER);
+        m_brightnessColorSlider->labelsize(12);
+		m_brightnessColorSlider->minimum(0.00);
+		m_brightnessColorSlider->maximum(1.00);
+		m_brightnessColorSlider->step(0.01);
+		m_brightnessColorSlider->value(m_nBrightnessColor);
+		m_brightnessColorSlider->align(FL_ALIGN_RIGHT);
+		m_brightnessColorSlider->callback(cb_brightnessColorSlides);
 	m_colorDialog->end();
 	/* (Tim) Color Dialog [END] */
 }

@@ -120,6 +120,7 @@ double ImpressionistDoc::getAlpha()
 	return m_pUI->getAlpha();
 }
 
+/* (Tim) Color Dialog [START] */
 double ImpressionistDoc::getRColor()
 {
 	return m_pUI->getRColor();
@@ -134,6 +135,12 @@ double ImpressionistDoc::getBColor()
 {
 	return m_pUI->getBColor();
 }
+
+double ImpressionistDoc::getBrightnessColor()
+{
+	return m_pUI->getBrightnessColor();
+}
+/* (Tim) Color Dialog [END] */
 
 //Set the attributes of Brushes
 void ImpressionistDoc::setSize(int size)
