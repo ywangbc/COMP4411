@@ -120,6 +120,21 @@ double ImpressionistDoc::getAlpha()
 	return m_pUI->getAlpha();
 }
 
+double ImpressionistDoc::getRColor()
+{
+	return m_pUI->getRColor();
+}
+
+double ImpressionistDoc::getGColor()
+{
+	return m_pUI->getGColor();
+}
+
+double ImpressionistDoc::getBColor()
+{
+	return m_pUI->getBColor();
+}
+
 //Set the attributes of Brushes
 void ImpressionistDoc::setSize(int size)
 {

@@ -37,6 +37,12 @@ public:
 	double		getAlpha();
 	//ADDED BY RYAN ENDED
 
+	/* (Tim) Color Dialog [START] */
+	double	getRColor();
+	double	getGColor();
+	double	getBColor();
+	/* (Tim) Color Dialog [END] */
+
 	void	setSize(int size);				// set the UI size
 	//ADDED BY RYAN STARTED
 	void	setStrokeDirect(int type);

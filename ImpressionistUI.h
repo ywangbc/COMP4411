@@ -50,6 +50,13 @@ public:
 	//ADDED BY RYAN ENDED
 	Fl_Button*          m_ClearCanvasButton;
 
+	/* (Tim) Color Dialog [START] */
+	Fl_Window*			m_colorDialog;
+	Fl_Slider*			m_rColorSlider;
+	Fl_Slider*			m_gColorSlider;
+	Fl_Slider*			m_bColorSlider;
+	/* (Tim) Color Dialog [END] */
+
 	// Member functions
 	void				setDocument(ImpressionistDoc* doc);
 	ImpressionistDoc*	getDocument();
@@ -65,6 +72,12 @@ public:
 	int					getLineAngle();
 	double				getAlpha();
 	//Added By Ryan ENDED
+
+	/* (Tim) Color Dialog [START] */
+	double				getRColor();
+	double				getGColor();
+	double				getBColor();
+	/* (Tim) Color Dialog [END] */
 
 
 	void				setSize(int size);
@@ -83,6 +96,12 @@ private:
 	int m_nLine_angle;
 	double m_nAlpha;
 	//Added By Ryan Ended 
+
+	/* (Tim) Color Dialog [START] */
+	double m_nRColor;
+	double m_nGColor;
+	double m_nBColor;
+	/* (Tim) Color Dialog [START] */
 
 
 	// Static class members
@@ -126,6 +145,12 @@ private:
 
 	//Added By Ryan ENDED
 	//Callbacks for Brush Dialog ENDED
+
+	/* (Tim) Color Dialog [START] */
+	static void cb_rColorSlides(Fl_Widget* o, void* v);
+	static void cb_gColorSlides(Fl_Widget* o, void* v);
+	static void cb_bColorSlides(Fl_Widget* o, void* v);
+	/* (Tim) Color Dialog [END] */
 	
 	//Added By Ryan STARTED (File)
 	static void	cb_colors(Fl_Menu_* o, void* v);

@@ -227,7 +227,7 @@ void ImpressionistUI::cb_exit(Fl_Menu_* o, void* v)
 {
 	whoami(o)->m_mainWindow->hide();
 	whoami(o)->m_brushDialog->hide();
-
+	whoami(o)->m_colorDialog->hide();
 }
 
 //------------------------------------------------------------
@@ -250,6 +250,7 @@ void ImpressionistUI::cb_swap_canvas(Fl_Menu_* o, void* v)
 //Added By Ryan Started ( File)
 void ImpressionistUI::cb_colors(Fl_Menu_* o, void* v)
 {
+	whoami(o)->m_colorDialog->show();
 }
 void ImpressionistUI::cb_paintly(Fl_Menu_* o, void* v)
 {
@@ -375,6 +376,24 @@ void ImpressionistUI::cb_alphaSlides(Fl_Widget* o, void* v)
 }
 //Added By Ryan ENDED
 
+/* (Tim) Color Dialog [START] */
+//Update the R channel
+void ImpressionistUI::cb_rColorSlides(Fl_Widget* o, void* v)
+{
+	((ImpressionistUI*)(o->user_data()))->m_nRColor = double(((Fl_Slider *)o)->value())/255.0;
+}
+//Update the G channel
+void ImpressionistUI::cb_gColorSlides(Fl_Widget* o, void* v)
+{
+	((ImpressionistUI*)(o->user_data()))->m_nGColor = double(((Fl_Slider *)o)->value())/255.0;
+}
+//Update the B channel
+void ImpressionistUI::cb_bColorSlides(Fl_Widget* o, void* v)
+{
+	((ImpressionistUI*)(o->user_data()))->m_nBColor = double(((Fl_Slider *)o)->value())/255.0;
+}
+/* (Tim) Color Dialog [END] */
+
 //---------------------------------- per instance functions --------------------------------------
 
 //------------------------------------------------
@@ -439,6 +458,23 @@ double ImpressionistUI::getAlpha()
 }
 
 //ADDED BY RYAN ENDED
+
+/* (Tim) Color Dialog [START] */
+double ImpressionistUI::getRColor()
+{
+	return m_nRColor;
+}
+
+double ImpressionistUI::getGColor()
+{
+	return m_nGColor;
+}
+
+double ImpressionistUI::getBColor()
+{
+	return m_nBColor;
+}
+/* (Tim) Color Dialog [END] */
 
 //-------------------------------------------------
 // Set the brush size
@@ -568,16 +604,21 @@ ImpressionistUI::ImpressionistUI() {
     m_mainWindow->end();
 
 	// init values STARTED
-
 	m_nSize = 10;
 	m_nLine_width=1;
 	m_nLine_angle=0;
 	m_nAlpha=1;
+
 	//added By Ryan STARTED
 
-
 	//added By Ryan ENDED
-	//init values STARTED
+
+	/* (Tim) Color Dialog [START] */
+	m_nRColor = 1.0;
+	m_nGColor = 1.0;
+	m_nBColor = 1.0;
+	/* (Tim) Color Dialog [END] */
+	// init values ENDED
 
 	// brush dialog definition
 	m_brushDialog = new Fl_Window(400, 325, "Brush Dialog");
@@ -663,4 +704,43 @@ ImpressionistUI::ImpressionistUI() {
 
     m_brushDialog->end();	
 
+	/* (Tim) Color Dialog [START] */
+	m_colorDialog = new Fl_Window(600, 300, "Color Dialog");
+		m_rColorSlider = new Fl_Value_Slider(10, 10, 300, 20, "Red Channel");
+		m_rColorSlider->user_data((void*)(this));	// record self to be used by static callback functions
+		m_rColorSlider->type(FL_HOR_NICE_SLIDER);
+        m_rColorSlider->labelfont(FL_COURIER);
+        m_rColorSlider->labelsize(12);
+		m_rColorSlider->minimum(0);
+		m_rColorSlider->maximum(255);
+		m_rColorSlider->step(1);
+		m_rColorSlider->value(255*m_nRColor);
+		m_rColorSlider->align(FL_ALIGN_RIGHT);
+		m_rColorSlider->callback(cb_rColorSlides);
+
+		m_gColorSlider = new Fl_Value_Slider(10, 40, 300, 20, "Green Channel");
+		m_gColorSlider->user_data((void*)(this));	// record self to be used by static callback functions
+		m_gColorSlider->type(FL_HOR_NICE_SLIDER);
+        m_gColorSlider->labelfont(FL_COURIER);
+        m_gColorSlider->labelsize(12);
+		m_gColorSlider->minimum(0);
+		m_gColorSlider->maximum(255);
+		m_gColorSlider->step(1);
+		m_gColorSlider->value(255*m_nGColor);
+		m_gColorSlider->align(FL_ALIGN_RIGHT);
+		m_gColorSlider->callback(cb_gColorSlides);
+
+		m_bColorSlider = new Fl_Value_Slider(10, 70, 300, 20, "Blue Channel");
+		m_bColorSlider->user_data((void*)(this));	// record self to be used by static callback functions
+		m_bColorSlider->type(FL_HOR_NICE_SLIDER);
+        m_bColorSlider->labelfont(FL_COURIER);
+        m_bColorSlider->labelsize(12);
+		m_bColorSlider->minimum(0);
+		m_bColorSlider->maximum(255);
+		m_bColorSlider->step(1);
+		m_bColorSlider->value(255*m_nBColor);
+		m_bColorSlider->align(FL_ALIGN_RIGHT);
+		m_bColorSlider->callback(cb_bColorSlides);
+	m_colorDialog->end();
+	/* (Tim) Color Dialog [END] */
 }

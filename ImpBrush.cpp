@@ -48,8 +48,14 @@ void ImpBrush::SetColor (const Point source)
 	GLubyte color[4];
 	// glBlendFunc(GL_ZERO, GL_SRC1_ALPHA);
 	memcpy ( color, pDoc->GetOriginalPixel( source ), 3 );
-	double alpha=GetDocument()->getAlpha();
-	color[3]=GLubyte(alpha*RANGE);
+	double alpha = GetDocument()->getAlpha();
+	double rColor = GetDocument()->getRColor();				// Red Filter
+	double gColor = GetDocument()->getGColor();				// Green Filter
+	double bColor = GetDocument()->getBColor();				// Blue Filter
+	color[0] = GLubyte((color[0]/255.0*rColor)*RANGE);
+	color[1] = GLubyte((color[1]/255.0*gColor)*RANGE);
+	color[2] = GLubyte((color[2]/255.0*bColor)*RANGE);
+	color[3] = GLubyte(alpha*RANGE);
 	glColor4ubv( color );
 }
 //ADDED BY RYAN START
@@ -92,7 +98,7 @@ void ImpBrush::SetColorAlpha(const Point source)
 //ADDED BY RYAN END
 double ImpBrush::dist(Point a, Point b)
 {
-	double xDist=a.x-b.x;;
+	double xDist=a.x-b.x;
 	double yDist=a.y-b.y;
 	return sqrt(xDist*xDist+yDist*yDist);
 }
