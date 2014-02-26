@@ -11,7 +11,6 @@
 #include "paintview.h"
 #include "ImpBrush.h"
 
-const double PI=3.1415927;
 
 #define LEFT_MOUSE_DOWN		1
 #define LEFT_MOUSE_DRAG		2

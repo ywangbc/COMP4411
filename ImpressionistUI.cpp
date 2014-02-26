@@ -293,6 +293,19 @@ void ImpressionistUI::cb_brushChoice(Fl_Widget* o, void* v)
 	pDoc->setBrushType(type);
 }
 
+//Sets the line Stroke_direction  to the one chosen in the stroke 
+//direction choice
+//Called by the UI when the brush is chosen in the bsush choice
+void ImpressionistUI::cb_strokeDirection(Fl_Widget* o, void* v)
+{
+	ImpressionistUI* pUI=((ImpressionistUI *)(o->user_data()));
+	ImpressionistDoc* pDoc=pUI->getDocument();
+
+	int type=(int)v;
+
+	pDoc->setStrokeDirect(type);
+}
+
 //------------------------------------------------------------
 // Clears the paintview canvas.
 // Called by the UI when the clear canvas button is pushed
@@ -440,6 +453,9 @@ void ImpressionistUI::setLineAngle(int angle)
 
 
 
+
+
+
 //ADDED BY RYAN ENDED
 // Main menu definition
 Fl_Menu_Item ImpressionistUI::menuitems[] = {
@@ -491,6 +507,15 @@ Fl_Menu_Item ImpressionistUI::brushTypeMenu[NUM_BRUSH_TYPE+1] = {
   {"Scattered Circles",	FL_ALT+'d', (Fl_Callback *)ImpressionistUI::cb_brushChoice, (void *)BRUSH_SCATTERED_CIRCLES},
   {0}
 };
+
+//Brush direction menu definition
+Fl_Menu_Item ImpressionistUI::strokeDirectionMenu[NUM_STROKE_DIRECTION+1] = {
+	{"Slider/Right Mouse",	FL_ALT+'s', (Fl_Callback *)ImpressionistUI::cb_strokeDirection, (void* )STROKE_SLIDER},
+	{"Gradient",			FL_ALT+'g', (Fl_Callback *)ImpressionistUI::cb_strokeDirection, (void* )STROKE_GRAD},
+	{"Brush Direction",		FL_ALT+'b', (Fl_Callback *)ImpressionistUI::cb_strokeDirection, (void* )STROKE_BRUSH},
+	{0}
+};
+
 
 
 
@@ -546,6 +571,14 @@ ImpressionistUI::ImpressionistUI() {
 		m_ClearCanvasButton = new Fl_Button(240,10,150,25,"&Clear Canvas");
 		m_ClearCanvasButton->user_data((void*)(this));
 		m_ClearCanvasButton->callback(cb_clear_canvas_button);
+
+		m_StrokeDirectionChoice = new Fl_Choice(110,40,160,25,"&Stroke Direction");
+		m_StrokeDirectionChoice->user_data((void*)(this));
+		m_StrokeDirectionChoice->menu(strokeDirectionMenu);
+		m_StrokeDirectionChoice->callback(cb_strokeDirection);
+
+		// Add line direction function to the software
+
 
 
 		// Add brush size slider to the dialog 

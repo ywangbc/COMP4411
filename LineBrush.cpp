@@ -5,13 +5,11 @@
 // will look like the file with the different GL primitive calls.
 //
 
-
+#include <cmath>
 #include "impressionistDoc.h"
 #include "impressionistUI.h"
-#include <cmath>
 #include "LineBrush.h"
 
-const double PI=3.1415927;
 extern float frand();
 
 LineBrush::LineBrush( ImpressionistDoc* pDoc, char* name ) :
@@ -29,6 +27,7 @@ void LineBrush::BrushBegin( const Point source, const Point target )
 
 
 	glPointSize(size);
+	pDoc->current=target;
 
 	BrushMove( source, target );
 }
@@ -53,12 +52,6 @@ void LineBrush::BrushMove( const Point source, const Point target )
 	double halfLength = length/2.0;  //Need to be converted to double. Or nothing will be drawn when length is 1
 	//Processing LineLength ENDED
 	
-	//Processing LineAngle STARTED
-	int angle = GetDocument()->getLineAngle();
-	double mathAngle=(angle%360)/360.0*2*PI;
-	double cosV=cos(mathAngle);
-	double sinV=sin(mathAngle);
-	//Processing LineAngle ENDED
 	int windowH=dlg->m_mainWindow->h();
 	int drawHeight=dlg->m_paintView->GetDrawHeight();
 
@@ -66,6 +59,61 @@ void LineBrush::BrushMove( const Point source, const Point target )
 	int endCol=dlg->m_paintView->GetEndCol();
 	int startRow=dlg->m_paintView->GetStartRow()+windowH-drawHeight-25;
 	int endRow=startRow+drawHeight;
+	//Processing LineAngle STARTED
+	int angle = 0;
+
+	switch(pDoc->lineDirectPattern)
+	{
+	case STROKE_SLIDER:
+	{
+		angle= pDoc->getLineAngle();
+	}
+		break;
+	case STROKE_GRAD:
+	{
+		int x=target.x-startCol;
+		int y=target.y-startRow;
+		int width=pDoc->m_nWidth;
+		int height=pDoc->m_nHeight;
+		if(x<=0||x>width)
+		{
+			angle=90;
+		}
+		else if(y<=0||y>height)
+		{
+			angle=0;
+		}
+		else
+		{
+			angle= pDoc->m_ucAngle[x+y*width];
+		}
+	}
+		break;
+	case STROKE_BRUSH:
+	{
+		double xDiff=target.x-(pDoc->current.x);
+		double yDiff=target.y-(pDoc->current.y);
+
+		pDoc->current=target;
+
+		if(xDiff==0) angle=90;
+		else
+		{
+			angle = atan2(yDiff,xDiff)/(2*PI)*360;
+		}
+	}
+		break;
+	default:
+		printf("No such brush exist\n");
+	}
+
+	double mathAngle=(angle%360)/360.0*2*PI;
+	double cosV=cos(mathAngle);
+	double sinV=sin(mathAngle);
+	//Processing LineAngle ENDED
+
+
+
 
 	double axis[8];
 	axis[0]=target.x-halfLength*cosV-halfWidth*sinV;

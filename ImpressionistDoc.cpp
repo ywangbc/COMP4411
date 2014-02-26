@@ -31,6 +31,10 @@ ImpressionistDoc::ImpressionistDoc()
 	m_nWidth		= -1;
 	m_ucBitmap		= NULL;
 	m_ucPainting	= NULL;
+	m_ucGray		= NULL;
+	m_ucBlur		= NULL;
+	m_ucAngle		=NULL;
+	lineDirectPattern	=0; 
 
 
 	// create one instance of each brush
@@ -114,6 +118,30 @@ void ImpressionistDoc::setSize(int size)
 {
 	m_pUI->setSize(size);
 }
+
+void ImpressionistDoc::setStrokeDirect(int type)
+{
+	switch(type)
+	{
+	case STROKE_SLIDER:
+	{
+		lineDirectPattern = STROKE_SLIDER;
+		break;
+	}
+	case STROKE_GRAD:
+	{
+		lineDirectPattern = STROKE_GRAD;
+		break;
+	}
+	case STROKE_BRUSH:
+	{
+		lineDirectPattern = STROKE_BRUSH;
+		break;
+	}
+	default:
+		printf("The stroke direction is not identifiable\n");
+	}
+}
 void ImpressionistDoc::setLineWidth(int width)
 {
 	m_pUI->setLineWidth(width);
@@ -154,12 +182,106 @@ int ImpressionistDoc::loadImage(char *iname)
 	// release old storage
 	if ( m_ucBitmap ) delete [] m_ucBitmap;
 	if ( m_ucPainting ) delete [] m_ucPainting;
+	if (m_ucGray) delete [] m_ucGray; 
+	if (m_ucBlur) delete [] m_ucBlur;
+	if (m_ucAngle) delete [] m_ucAngle;
 
 	m_ucBitmap		= data;
 
 	// allocate space for draw view
 	m_ucPainting	= new unsigned char [width*height*3];
+	
+	//allocate space for the gray version
+	m_ucGray		= new unsigned char [width*height*3];
+
+	//allocate space for the blur version
+	m_ucBlur		= new unsigned char [width*height*3];
+
+	//allocate space to store the line anlge of each pixel
+	m_ucAngle		= new int [width*height]; 
+
+
+	
+
 	memset(m_ucPainting, 0, width*height*3);
+	memset(m_ucGray, 0, width*height*3);
+	memset(m_ucBlur, 0, width*height*3);
+	memset(m_ucAngle, 0, width*height*sizeof(int));
+
+	//Processing to get the Gray version
+
+	for(int i = 0; i < width*height; i++)
+	{
+		unsigned char r,g,b,lum;
+		
+		for(int j=0;j<3;j++)
+		{
+			switch(j)
+			{
+			case 0:
+				r=data[i*3+j];
+				break;
+			case 1:
+				g=data[i*3+j];
+				break;
+			case 2:
+				b=data[i*3+j];
+				break;
+			}
+		}
+		lum = (r*0.30) + (g*0.59) + (b*0.11);
+		for(int j=0;j<3;j++)
+		{
+			m_ucGray[i*3+j]=lum;
+		}
+	}
+
+	//Now we use the gray image to create the blur image
+	for(int j=1;j<height-1;j++)
+		for(int i=1;i<width-1;i++)
+		{
+			double sum=0;
+			for(int l=0;l<3;l++)
+				for(int k=0;k<3;k++)
+				{
+					int x=i-1+k;
+					int y=j-1+l;
+
+					sum+=m_ucGray[(x+y*width)*3];
+				}
+			unsigned char blurVal=sum/9;
+			
+			for(int m=0;m<3;m++)
+			{
+				m_ucBlur[(i+j*width)*3+m]=blurVal;
+			}
+		}
+
+	//Now we calculate the angle for each pixel
+	for(int j=1;j<height-1;j++)
+		for(int i=1;i<width-1;i++)
+		{
+			double xDiff =
+				m_ucBlur[(i+j*width)*3]-m_ucBlur[(i-1+j*width)*3];
+			double yDiff = 
+				m_ucBlur[(i+j*width)*3]-m_ucBlur[(i+(j-1)*width)*3];
+			
+			int angle = 0;
+			if(xDiff==0) angle=90;
+			else
+			{
+				double temp=atan2(yDiff,xDiff);
+				angle=temp/(2*PI)*360;
+			}
+
+			angle=(angle+90)%360;
+			m_ucAngle[i+j*width]=angle;
+			
+		}
+
+	
+
+
 
 	m_pUI->m_mainWindow->resize(m_pUI->m_mainWindow->x(), 
 									m_pUI->m_mainWindow->y(), 

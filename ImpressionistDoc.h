@@ -7,9 +7,12 @@
 #ifndef ImpressionistDoc_h
 #define ImpressionistDoc_h
 
+#include <cstdlib>
+#include <cmath>
 #include "impressionist.h"
 #include "bitmap.h"
-#include <cstdlib>
+
+const double PI=3.1415927;
 
 class ImpressionistUI;
 
@@ -36,6 +39,7 @@ public:
 
 	void	setSize(int size);				// set the UI size
 	//ADDED BY RYAN STARTED
+	void	setStrokeDirect(int type);
 	void	setLineWidth(int width);
 	void	setLineAngle(int angle);
 	//ADDED BY RYAN ENDED
@@ -54,9 +58,20 @@ public:
 	unsigned char*	m_ucBitmap;
 	unsigned char*	m_ucPainting;
 
+	// The blurred image which contains intensity only
+	unsigned char* m_ucGray;
+	// Processed by box filter
+	unsigned char* m_ucBlur;
+	// Store the line angle of each pixel
+	int* m_ucAngle;
+	//Store the direction of stroke
+	int lineDirectPattern;
 
 	// The current active brush.
 	ImpBrush*			m_pCurrentBrush;	
+	Point current;
+
+
 	// Size of the brush.
 	int m_nSize;							
 
