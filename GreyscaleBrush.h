@@ -17,6 +17,7 @@ public:
 	void BrushBegin( const Point source, const Point target );
 	void BrushMove( const Point source, const Point target );
 	void BrushEnd( const Point source, const Point target );
+	void PointBrushMove( const Point source, const Point target );
 	char* BrushName( void );
 	void GreyscaleBrush::SetColor (const Point);
 };

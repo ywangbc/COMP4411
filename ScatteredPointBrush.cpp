@@ -20,6 +20,10 @@ void ScatteredPointBrush::BrushBegin( const Point source, const Point target )
 	ImpressionistDoc* pDoc = GetDocument();
 	ImpressionistUI* dlg=pDoc->m_pUI;
 
+	/* (Tim) Save Paint for Undo [START] */
+	savePaintForUndo();
+	/* (Tim) Save Paint for Undo [END] */
+
 	int size = pDoc->getSize();
 
 

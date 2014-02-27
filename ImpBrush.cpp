@@ -103,3 +103,14 @@ double ImpBrush::dist(Point a, Point b)
 	double yDist=a.y-b.y;
 	return sqrt(xDist*xDist+yDist*yDist);
 }
+
+/* (Tim) Save Paint for Undo [START] */
+void ImpBrush::savePaintForUndo() {
+	ImpressionistDoc* pDoc = GetDocument();
+
+	int dimension = pDoc->m_nPaintWidth * pDoc->m_nPaintHeight * 3;
+	delete [] pDoc->m_ucPainting_Undo;
+	pDoc->m_ucPainting_Undo = new unsigned char [dimension];
+	memcpy(pDoc->m_ucPainting_Undo, pDoc->m_ucPainting, dimension);
+}
+/* (Tim) Save Paint for Undo [END] */

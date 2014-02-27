@@ -22,11 +22,9 @@ void PointBrush::BrushBegin( const Point source, const Point target )
 	ImpressionistDoc* pDoc = GetDocument();
 	ImpressionistUI* dlg=pDoc->m_pUI;
 
-	// Undo
-	int dimension = pDoc->m_nPaintWidth * pDoc->m_nPaintHeight * 3;
-	delete [] pDoc->m_ucPainting_Undo;
-	pDoc->m_ucPainting_Undo = new unsigned char [dimension];
-	memcpy(pDoc->m_ucPainting_Undo, pDoc->m_ucPainting, dimension);
+	/* (Tim) Save Paint for Undo [START] */
+	savePaintForUndo();
+	/* (Tim) Save Paint for Undo [END] */
 
 	int size = pDoc->getSize();
 
