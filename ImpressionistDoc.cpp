@@ -22,6 +22,7 @@
 
 // Newly implemented brushes
 #include "GreyscaleBrush.h"
+#include "ContrastBrush.h"
 
 
 #define DESTROY(p)	{  if ((p)!=NULL) {delete [] p; p=NULL; } }
@@ -62,6 +63,8 @@ ImpressionistDoc::ImpressionistDoc()
 	// Newly implemented brushes
 	ImpBrush::c_pBrushes[BRUSH_GREYSCALE]	
 		= new GreyscaleBrush( this, "Greyscale" );
+	ImpBrush::c_pBrushes[BRUSH_CONTRAST]	
+		= new ContrastBrush( this, "Contrast" );
 
 	// make one of the brushes current
 	m_pCurrentBrush	= ImpBrush::c_pBrushes[0];

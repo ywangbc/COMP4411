@@ -19,8 +19,9 @@ enum
 	BRUSH_SCATTERED_POINTS,
 	BRUSH_SCATTERED_LINES,
 	BRUSH_SCATTERED_CIRCLES,
-	BRUSH_GREYSCALE,		// [Tim] Greyscale Brush
-	NUM_BRUSH_TYPE	// Make sure this stays at the end!
+	BRUSH_GREYSCALE,				// (Tim) Greyscale Brush
+	BRUSH_CONTRAST,					// (Tim) Contrast Brush
+	NUM_BRUSH_TYPE					// Make sure this stays at the end!
 };
 
 enum

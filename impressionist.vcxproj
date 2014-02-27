@@ -133,6 +133,7 @@
   <ItemGroup>
     <ClCompile Include="Bitmap.cpp" />
     <ClCompile Include="CircleBrush.cpp" />
+    <ClCompile Include="ContrastBrush.cpp" />
     <ClCompile Include="GreyscaleBrush.cpp" />
     <ClCompile Include="ImpBrush.cpp" />
     <ClCompile Include="Impressionist.cpp" />
@@ -149,6 +150,7 @@
   <ItemGroup>
     <ClInclude Include="bitmap.h" />
     <ClInclude Include="CircleBrush.h" />
+    <ClInclude Include="ContrastBrush.h" />
     <ClInclude Include="GreyscaleBrush.h" />
     <ClInclude Include="ImpBrush.h" />
     <ClInclude Include="impressionist.h" />
