@@ -109,8 +109,16 @@ void ImpBrush::savePaintForUndo() {
 	ImpressionistDoc* pDoc = GetDocument();
 
 	int dimension = pDoc->m_nPaintWidth * pDoc->m_nPaintHeight * 3;
+	unsigned char* undo = new unsigned char [dimension];
+
+	memcpy(undo, pDoc->m_ucPainting, dimension);
+	pDoc->m_ucPainting_Undo.push(undo);
+	
+	/* ImpressionistDoc* pDoc = GetDocument();
+
+	int dimension = pDoc->m_nPaintWidth * pDoc->m_nPaintHeight * 3;
 	delete [] pDoc->m_ucPainting_Undo;
 	pDoc->m_ucPainting_Undo = new unsigned char [dimension];
-	memcpy(pDoc->m_ucPainting_Undo, pDoc->m_ucPainting, dimension);
+	memcpy(pDoc->m_ucPainting_Undo, pDoc->m_ucPainting, dimension); */
 }
 /* (Tim) Save Paint for Undo [END] */

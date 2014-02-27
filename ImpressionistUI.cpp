@@ -216,13 +216,13 @@ void ImpressionistUI::cb_undo(Fl_Menu_* o, void* v)
 {
 	ImpressionistDoc* pDoc=whoami(o)->getDocument();
 
-	unsigned char* m_tmp = pDoc->m_ucPainting;
+	if (!pDoc->m_ucPainting_Undo.empty()) {
+		delete [] pDoc->m_ucPainting;
+		pDoc->m_ucPainting = pDoc->m_ucPainting_Undo.top();
+		pDoc->m_ucPainting_Undo.pop();
 
-	pDoc->m_ucPainting = pDoc->m_ucPainting_Undo;
-	pDoc->m_ucPainting_Undo = m_tmp;
-
-	pDoc->m_pUI->m_origView->refresh();
-	pDoc->m_pUI->m_paintView->refresh(); // ---------------------------- TODO
+		pDoc->m_pUI->m_paintView->refresh();
+	}
 }
 
 //------------------------------------------------------------
@@ -561,7 +561,7 @@ Fl_Menu_Item ImpressionistUI::menuitems[] = {
 		{ "&Load Image...",	FL_ALT + 'l', (Fl_Callback *)ImpressionistUI::cb_load_image },
 		{ "&Save Image...",	FL_ALT + 's', (Fl_Callback *)ImpressionistUI::cb_save_image },
 		{ "&Brushes...",	FL_ALT + 'b', (Fl_Callback *)ImpressionistUI::cb_brushes }, 
-		{ "&Undo",	FL_ALT + 'z', (Fl_Callback *)ImpressionistUI::cb_undo }, 
+		{ "&Undo",	FL_CTRL + 'z', (Fl_Callback *)ImpressionistUI::cb_undo }, 
 		{ "S&wap Canvas", FL_ALT + 'w', (Fl_Callback *)ImpressionistUI::cb_swap_canvas },
 		{ "&Clear Canvas", FL_ALT + 'c', (Fl_Callback *)ImpressionistUI::cb_clear_canvas, 0, FL_MENU_DIVIDER },
 	//Added By Ryan Started (File)
