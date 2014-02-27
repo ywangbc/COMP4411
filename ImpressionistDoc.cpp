@@ -34,6 +34,7 @@ ImpressionistDoc::ImpressionistDoc()
 	m_nWidth		= -1;
 	m_ucBitmap		= NULL;
 	m_ucPainting	= NULL;
+	m_ucPainting_Undo = NULL;
 	m_ucGray		= NULL;
 	m_ucBlur		= NULL;
 	m_ucAngle		=NULL;
@@ -211,6 +212,7 @@ int ImpressionistDoc::loadImage(char *iname)
 	// release old storage
 	if ( m_ucBitmap ) delete [] m_ucBitmap;
 	if ( m_ucPainting ) delete [] m_ucPainting;
+	if ( m_ucPainting_Undo ) delete [] m_ucPainting_Undo;
 	if (m_ucGray) delete [] m_ucGray; 
 	if (m_ucBlur) delete [] m_ucBlur;
 	if (m_ucAngle) delete [] m_ucAngle;
@@ -219,6 +221,9 @@ int ImpressionistDoc::loadImage(char *iname)
 
 	// allocate space for draw view
 	m_ucPainting	= new unsigned char [width*height*3];
+
+	// allocate space for undo
+	m_ucPainting_Undo	= new unsigned char [width*height*3];
 	
 	//allocate space for the gray version
 	m_ucGray		= new unsigned char [width*height*3];
@@ -233,6 +238,7 @@ int ImpressionistDoc::loadImage(char *iname)
 	
 
 	memset(m_ucPainting, 0, width*height*3);
+	memset(m_ucPainting_Undo, 0, width*height*3);
 	memset(m_ucGray, 0, width*height*3);
 	memset(m_ucBlur, 0, width*height*3);
 	memset(m_ucAngle, 0, width*height*sizeof(int));
