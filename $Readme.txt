@@ -7,6 +7,12 @@
 
 [[[ Bonus ]]]
 
++ Cursor on Original View
+   % show a red cursor on the original view to indicate the position of the referenced image
+
++ Painting Area's Edge Detection
+   % restrict the brush to paint only inside the painting area
+
 + Swap Canvas		$ [File] -> [Swap Canvas]
    % swap the Original and Painting Canvas
 
@@ -20,6 +26,3 @@
 
 + Undo			$ [File] -> [Undo]
    % undo the painting action (unlimited)
-
-+ Painting Area's Edge Detection
-   % restrict the brush to paint only inside the painting area

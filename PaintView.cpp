@@ -192,31 +192,6 @@ void PaintView::draw()
 
 int PaintView::handle(int event)
 {
-	Point scrollpos;// = GetScrollPosition();
-	scrollpos.x = 0;
-	scrollpos.y	= 0;
-
-	m_nWindowWidth	= w();
-	m_nWindowHeight	= h();
-
-	int drawWidth, drawHeight;
-	drawWidth = min( m_nWindowWidth, m_pDoc->m_nPaintWidth );
-	drawHeight = min( m_nWindowHeight, m_pDoc->m_nPaintHeight );
-
-	int startrow = m_pDoc->m_nPaintHeight - (scrollpos.y + drawHeight);
-	if ( startrow < 0 ) startrow = 0;
-
-	m_pPaintBitstart = m_pDoc->m_ucPainting + 
-		3 * ((m_pDoc->m_nPaintWidth * startrow) + scrollpos.x);
-
-	m_nDrawWidth	= drawWidth;
-	m_nDrawHeight	= drawHeight;
-
-	m_nStartRow		= startrow;
-	m_nEndRow		= startrow + drawHeight;
-	m_nStartCol		= scrollpos.x;
-	m_nEndCol		= m_nStartCol + drawWidth;
-
 	switch(event)
 	{
 	case FL_ENTER:
@@ -245,8 +220,8 @@ int PaintView::handle(int event)
 		/* (Tim) Cursor on Origainl View [START] */
 		m_pDoc->m_pUI->m_origView->isEvent = true;
 		m_pDoc->m_pUI->m_origView->eventToDo = MOUSE_MOVE;
-		m_pDoc->m_pUI->m_origView->cursor.x = coord.x + m_nStartCol;
-		m_pDoc->m_pUI->m_origView->cursor.y = m_nEndRow - coord.y;
+		m_pDoc->m_pUI->m_origView->cursor.x = coord.x;
+		m_pDoc->m_pUI->m_origView->cursor.y = h() - coord.y;
 		m_pDoc->m_pUI->m_origView->refresh();
 		/* (Tim) Cursor on Origainl View [END] */
 
@@ -268,8 +243,8 @@ int PaintView::handle(int event)
 		/* (Tim) Cursor on Origainl View [START] */
 		m_pDoc->m_pUI->m_origView->isEvent = true;
 		m_pDoc->m_pUI->m_origView->eventToDo = MOUSE_MOVE;
-		m_pDoc->m_pUI->m_origView->cursor.x = coord.x + m_nStartCol;
-		m_pDoc->m_pUI->m_origView->cursor.y = m_nEndRow - coord.y;
+		m_pDoc->m_pUI->m_origView->cursor.x = coord.x;
+		m_pDoc->m_pUI->m_origView->cursor.y = h() - coord.y;
 		m_pDoc->m_pUI->m_origView->refresh();
 		/* (Tim) Cursor on Origainl View [END] */
 		break;
