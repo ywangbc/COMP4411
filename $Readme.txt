@@ -9,7 +9,6 @@
 
 + Swap Canvas		$ [File] -> [Swap Canvas]
    % swap the Original and Painting Canvas
-   
 
 + Filter Brush		$ [File] -> [Brushes...] -> [Brush]
    @ Greyscale Brush	% paint the picture in greyscale
