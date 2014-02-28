@@ -655,6 +655,7 @@ ImpressionistUI::ImpressionistUI() {
 	m_nLine_width=1;
 	m_nLine_angle=0;
 	m_nAlpha=1;
+	threshold=35;
 
 	//added By Ryan STARTED
 
@@ -750,6 +751,40 @@ ImpressionistUI::ImpressionistUI() {
 		//Alpha slider to the dialog ENDED
 		//Added By Ryan ENDED
 
+		//Control the activation of edge clip
+		m_bEdgeClip = new Fl_Light_Button(10,210,150,25,"&Edge Clipping");
+		m_bEdgeClip->user_data((void*)(this));
+		m_bEdgeClip->callback(edgeClipControl);
+
+		//The pack control the threshold of edge image
+		m_bEdgePack = new Fl_Group(10, 240, 400, 30);
+
+			//Edge slider to the dialog STARTED
+			m_ThresholdSlider = new Fl_Value_Slider(10, 245, 150, 20, "Edge Threshold");
+			m_ThresholdSlider->user_data((void*)(this));	// record self to be used by static callback functions
+			m_ThresholdSlider->type(FL_HOR_NICE_SLIDER);
+			m_ThresholdSlider->labelfont(FL_COURIER);
+			m_ThresholdSlider->labelsize(12);
+			m_ThresholdSlider->minimum(0);
+			m_ThresholdSlider->maximum(500);
+			m_ThresholdSlider->step(1);
+			m_ThresholdSlider->value(threshold);
+			m_ThresholdSlider->align(FL_ALIGN_RIGHT);
+			m_ThresholdSlider->callback(cb_thresholdSlides);
+			
+
+			m_bDo = new Fl_Button(200,245,80,20,"Do it!");
+			m_bDo->user_data((void*)(this));   // record self to be used by static callback functions
+			m_bDo->callback(cb_do);
+
+
+		m_bEdgePack->end();
+
+
+
+
+
+
     m_brushDialog->end();	
 
 	/* (Tim) Color Dialog [START] */
@@ -834,3 +869,30 @@ void ImpressionistUI::cb_activation(int type)
 	}
 }
 
+unsigned char ImpressionistUI::cb_getThreshold()
+{
+	return threshold;
+}
+void ImpressionistUI::cb_setThreshold(unsigned char thre)
+{
+	threshold=thre;
+}
+
+void ImpressionistUI::edgeClipControl(Fl_Widget* o, void* v)
+{
+
+}
+
+void ImpressionistUI::cb_thresholdSlides(Fl_Widget* o, void* v)
+{
+	((ImpressionistUI*)(o->user_data()))->threshold=int( ((Fl_Slider *)o)->value() / 7.0) ;
+}
+
+void ImpressionistUI::cb_do(Fl_Widget* o, void* v)
+{
+
+	ImpressionistDoc * pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
+	pDoc->getThresholdImage();
+			//Create the threshold image using distance image
+
+}
