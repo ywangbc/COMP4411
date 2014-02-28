@@ -24,5 +24,8 @@
    % filter the picture in user-defined color
    % only applicable to non-filter brushes
 
++ Dissolve Image	$ [File] -> [Dissolve An Image]
+   % Dissolve an image into the background image
+
 + Undo			$ [File] -> [Undo]
    % undo the painting action (unlimited)

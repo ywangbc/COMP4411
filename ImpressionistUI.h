@@ -131,8 +131,11 @@ private:
 		//Added By Ryan ENDED
 	
 
-	//(Tim)
+	// (Tim) Swap the Canvas
 	static void	cb_swap_canvas(Fl_Menu_* o, void* v);
+
+	// (Tim) Dissolve an image into the original image
+	static void cb_dissolve_image(Fl_Menu_* o, void* v);
 
 	//change the line Stroke_direction
 	static void cb_strokeDirection(Fl_Widget* o, void* v);

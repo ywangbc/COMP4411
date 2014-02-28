@@ -375,6 +375,166 @@ int ImpressionistDoc::clearCanvas()
 	return 0;
 }
 
+/* (Tim) Dissolve An Image into The Original Image [START] */
+//---------------------------------------------------------
+// Load the specified image
+// This is called by the UI when the load image button is 
+// pressed.
+//---------------------------------------------------------
+int ImpressionistDoc::load_DissolveImage(char *iname) 
+{
+	// try to open the image to read
+	unsigned char*	loaded;
+	int				width,
+					height;
+
+	if ( (loaded=readBMP(iname, width, height))==NULL ) 
+	{
+		fl_alert("Cannot load bitmap file.");
+		return 0;
+	}
+
+	// alert for loading an image which has a dimension bigger than the background
+	if ( width > m_nWidth || height > m_nHeight) {
+		fl_alert("The dimension of the loading image is bigger than the dimension of the background image.");
+		return 0;
+	}
+
+	// release old storage
+	if ( m_ucPainting ) delete [] m_ucPainting;
+	if (m_ucGray) delete [] m_ucGray; 
+	if (m_ucBlur) delete [] m_ucBlur;
+	if (m_ucAngle) delete [] m_ucAngle;
+
+	// empty Undo stack
+	while (!m_ucPainting_Undo.empty()) {
+		unsigned char* undo = m_ucPainting_Undo.top();
+		delete [] undo;
+		m_ucPainting_Undo.pop();
+	}
+
+	// dissolve the images
+	double alpha = 0.5;
+	for (int row = 0; row < height; ++row) {
+		for (int col = 0; col < width; ++col) {
+			for (int color = 0; color < 3; ++color) {
+				int byte_Original = (row*m_nWidth + col)*3 + color;
+				int byte_Loaded = (row*width + col)*3 + color;
+				m_ucBitmap[byte_Original] = char(m_ucBitmap[byte_Original]*(1 - alpha) + loaded[byte_Loaded]*(alpha));
+			}
+		}
+	}
+
+	// allocate space for draw view
+	m_ucPainting	= new unsigned char [m_nWidth*m_nHeight*3];
+	
+	//allocate space for the gray version
+	m_ucGray		= new unsigned char [m_nWidth*m_nHeight*3];
+
+	//allocate space for the blur version
+	m_ucBlur		= new unsigned char [m_nWidth*m_nHeight*3];
+
+	//allocate space to store the line anlge of each pixel
+	m_ucAngle		= new int [m_nWidth*m_nHeight];
+
+	memset(m_ucPainting, 0, m_nWidth*m_nHeight*3);
+	memset(m_ucGray, 0, m_nWidth*m_nHeight*3);
+	memset(m_ucBlur, 0, m_nWidth*m_nHeight*3);
+	memset(m_ucAngle, 0, m_nWidth*m_nHeight*sizeof(int));
+
+	//Processing to get the Gray version
+
+	for(int i = 0; i < m_nWidth*m_nHeight; i++)
+	{
+		unsigned char r,g,b,lum;
+		
+		for(int j=0;j<3;j++)
+		{
+			switch(j)
+			{
+			case 0:
+				r=m_ucBitmap[i*3+j];
+				break;
+			case 1:
+				g=m_ucBitmap[i*3+j];
+				break;
+			case 2:
+				b=m_ucBitmap[i*3+j];
+				break;
+			}
+		}
+		lum = (r*0.30) + (g*0.59) + (b*0.11);
+		for(int j=0;j<3;j++)
+		{
+			m_ucGray[i*3+j]=lum;
+		}
+	}
+
+	//Now we use the gray image to create the blur image
+	for(int j=1;j<m_nHeight-1;j++)
+		for(int i=1;i<m_nWidth-1;i++)
+		{
+			double sum=0;
+			for(int l=0;l<3;l++)
+				for(int k=0;k<3;k++)
+				{
+					int x=i-1+k;
+					int y=j-1+l;
+
+					sum+=m_ucGray[(x+y*m_nWidth)*3];
+				}
+			unsigned char blurVal=sum/9;
+			
+			for(int m=0;m<3;m++)
+			{
+				m_ucBlur[(i+j*m_nWidth)*3+m]=blurVal;
+			}
+		}
+
+	//Now we calculate the angle for each pixel
+	for(int j=1;j<m_nHeight-1;j++)
+		for(int i=1;i<m_nWidth-1;i++)
+		{
+			double xDiff =
+				m_ucBlur[(i+j*m_nWidth)*3]-m_ucBlur[(i-1+j*m_nWidth)*3];
+			double yDiff = 
+				m_ucBlur[(i+j*m_nWidth)*3]-m_ucBlur[(i+(j-1)*m_nWidth)*3];
+			
+			int angle = 0;
+			if(xDiff==0) angle=90;
+			else
+			{
+				double temp=atan2(yDiff,xDiff);
+				angle=temp/(2*PI)*360;
+			}
+
+			angle=(angle+90)%360;
+			m_ucAngle[i+j*m_nWidth]=angle;
+			
+		}
+
+	
+
+
+
+	m_pUI->m_mainWindow->resize(m_pUI->m_mainWindow->x(), 
+									m_pUI->m_mainWindow->y(), 
+							m_nWidth*2, 
+								m_nHeight+25);
+
+	// display it on origView
+	m_pUI->m_origView->resizeWindow(m_nWidth, m_nHeight);	
+	m_pUI->m_origView->refresh();
+
+	// refresh paint view as well
+	m_pUI->m_paintView->resizeWindow(m_nWidth, m_nHeight);	
+	m_pUI->m_paintView->refresh();
+
+
+	return 1;
+}
+/* (Tim) Dissolve An Image into The Original Image [END] */
+
 //------------------------------------------------------------------
 // Get the color of the pixel in the original image at coord x and y
 //------------------------------------------------------------------

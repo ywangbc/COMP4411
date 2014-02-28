@@ -280,6 +280,23 @@ void ImpressionistUI::cb_load_another_image(Fl_Menu_* o, void* v)
 }
 //Added By Ryan Ended (File)
 
+/* (Tim) Dissolve An Image into The Original Image [START] */
+void ImpressionistUI::cb_dissolve_image(Fl_Menu_* o, void* v)
+{
+	ImpressionistDoc *pDoc=whoami(o)->getDocument();
+
+	if (!pDoc->m_ucBitmap) {
+		fl_alert("Please load a background image first.");
+		return;
+	}
+
+	char* newImage = fl_file_chooser("Dissolve Image?", "*.bmp", pDoc->getImageName() );
+	if (newImage != NULL) {
+		pDoc->load_DissolveImage(newImage);
+	}
+}
+/* (Tim) Dissolve An Image into The Original Image [END] */
+
 //Added By Ryan Started (Display)
 void ImpressionistUI::cb_original_image(Fl_Menu_* o, void* v)
 {
@@ -564,12 +581,15 @@ Fl_Menu_Item ImpressionistUI::menuitems[] = {
 		{ "&Undo",	FL_CTRL + 'z', (Fl_Callback *)ImpressionistUI::cb_undo }, 
 		{ "S&wap Canvas", FL_ALT + 'w', (Fl_Callback *)ImpressionistUI::cb_swap_canvas },
 		{ "&Clear Canvas", FL_ALT + 'c', (Fl_Callback *)ImpressionistUI::cb_clear_canvas, 0, FL_MENU_DIVIDER },
+
 	//Added By Ryan Started (File)
 		{ "Colors", FL_ALT+'k',(Fl_Callback *)ImpressionistUI::cb_colors},
 		{ "Paintly", FL_ALT+'p',(Fl_Callback *)ImpressionistUI::cb_paintly, 0, FL_MENU_DIVIDER },
 
 		{ "Load Edge Image", FL_ALT+'e',(Fl_Callback *)ImpressionistUI::cb_load_edge_image},
 		{ "Load Another Image", FL_ALT+'a',(Fl_Callback *)ImpressionistUI::cb_load_another_image, 0, FL_MENU_DIVIDER},
+
+		{ "&Dissolve An Image", FL_ALT+'v',(Fl_Callback *)ImpressionistUI::cb_dissolve_image, 0, FL_MENU_DIVIDER },
 	//Added By Ryan Ended
 		
 		{ "&Quit",			FL_ALT + 'q', (Fl_Callback *)ImpressionistUI::cb_exit },
@@ -753,7 +773,7 @@ ImpressionistUI::ImpressionistUI() {
     m_brushDialog->end();	
 
 	/* (Tim) Color Dialog [START] */
-	m_colorDialog = new Fl_Window(600, 300, "Color Dialog");
+	m_colorDialog = new Fl_Window(412, 130, "Color Dialog");
 		m_rColorSlider = new Fl_Value_Slider(10, 10, 300, 20, "Red Channel");
 		m_rColorSlider->user_data((void*)(this));	// record self to be used by static callback functions
 		m_rColorSlider->type(FL_HOR_NICE_SLIDER);
