@@ -32,6 +32,12 @@ public:
 
 	ImpressionistDoc*	m_pDoc;
 
+	/* (Tim) Cursor on Origainl View [START] */
+	bool isEvent;
+	int eventToDo;
+	Point cursor;
+	/* (Tim) Cursor on Origainl View [END] */
+
 private:
 	int	m_nWindowWidth, 
 		m_nWindowHeight;

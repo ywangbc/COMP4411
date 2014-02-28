@@ -10,8 +10,10 @@
 #include "impressionistUI.h"
 #include "paintview.h"
 #include "ImpBrush.h"
+#include <iostream>
 
 
+#define MOUSE_MOVE			0
 #define LEFT_MOUSE_DOWN		1
 #define LEFT_MOUSE_DRAG		2
 #define LEFT_MOUSE_UP		3
@@ -214,6 +216,15 @@ int PaintView::handle(int event)
 			eventToDo=LEFT_MOUSE_DRAG;
 		isAnEvent=1;
 		redraw();
+
+		/* (Tim) Cursor on Origainl View [START] */
+		m_pDoc->m_pUI->m_origView->isEvent = true;
+		m_pDoc->m_pUI->m_origView->eventToDo = MOUSE_MOVE;
+		m_pDoc->m_pUI->m_origView->cursor.x = coord.x;
+		m_pDoc->m_pUI->m_origView->cursor.y = h() - coord.y;
+		m_pDoc->m_pUI->m_origView->refresh();
+		/* (Tim) Cursor on Origainl View [END] */
+
 		break;
 	case FL_RELEASE:
 		coord.x = Fl::event_x();
@@ -228,6 +239,14 @@ int PaintView::handle(int event)
 	case FL_MOVE:
 		coord.x = Fl::event_x();
 		coord.y = Fl::event_y();
+
+		/* (Tim) Cursor on Origainl View [START] */
+		m_pDoc->m_pUI->m_origView->isEvent = true;
+		m_pDoc->m_pUI->m_origView->eventToDo = MOUSE_MOVE;
+		m_pDoc->m_pUI->m_origView->cursor.x = coord.x;
+		m_pDoc->m_pUI->m_origView->cursor.y = h() - coord.y;
+		m_pDoc->m_pUI->m_origView->refresh();
+		/* (Tim) Cursor on Origainl View [END] */
 		break;
 	default:
 		return 0;

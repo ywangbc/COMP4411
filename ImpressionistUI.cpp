@@ -852,11 +852,16 @@ void ImpressionistUI::cb_activation(int type)
 	case BRUSH_CIRCLES:
 	case BRUSH_SCATTERED_POINTS:
 	case BRUSH_SCATTERED_CIRCLES:
+		this->m_StrokeDirectionChoice->deactivate();
+		this->m_LineWidthSlider->deactivate();
+		this->m_LineAngleSlider->deactivate();
+		break;
 	case BRUSH_GREYSCALE:
 	case BRUSH_CONTRAST:
 		this->m_StrokeDirectionChoice->deactivate();
 		this->m_LineWidthSlider->deactivate();
 		this->m_LineAngleSlider->deactivate();
+		this->m_AlphaSlider->deactivate();
 	break;
 
 	case BRUSH_LINES:

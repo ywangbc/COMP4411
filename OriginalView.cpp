@@ -8,6 +8,8 @@
 #include "impressionistDoc.h"
 #include "originalview.h"
 
+#define MOUSE_MOVE		0
+
 #ifndef WIN32
 #define min(a, b)	( ( (a)<(b) ) ? (a) : (b) )
 #endif
@@ -74,6 +76,22 @@ void OriginalView::draw()
 		glPixelStorei( GL_UNPACK_ROW_LENGTH, m_pDoc->m_nWidth );
 		glDrawBuffer( GL_BACK );
 		glDrawPixels( drawWidth, drawHeight, GL_RGB, GL_UNSIGNED_BYTE, bitstart );
+
+		if (isEvent) {
+			isEvent = false;
+
+			switch (eventToDo) {
+			case MOUSE_MOVE:
+				glBegin( GL_QUADS );
+					glVertex2i(cursor.x - 2, cursor.y + 2);
+					glVertex2i(cursor.x + 2, cursor.y + 2);
+					glVertex2i(cursor.x + 2, cursor.y - 2);
+					glVertex2i(cursor.x - 2, cursor.y - 2);
+					glColor3f( 1.0, 0, 0 );
+				glEnd();
+				break;
+			}
+		}
 
 	}
 			
