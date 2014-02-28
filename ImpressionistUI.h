@@ -58,6 +58,12 @@ public:
 	Fl_Slider*			m_brightnessColorSlider;
 	/* (Tim) Color Dialog [END] */
 
+	/* (Tim) Dissolve An Image Dialog [START] */
+	Fl_Window*			m_DissolveDialog;
+	Fl_Slider*			m_Dissolve_AlphaSlider;
+	Fl_Button*			m_Dissolve_LoadImageButton;
+	/* (Tim) Dissolve An Image Dialog [END] */
+
 	// Member functions
 	void				setDocument(ImpressionistDoc* doc);
 	ImpressionistDoc*	getDocument();
@@ -74,14 +80,6 @@ public:
 	double				getAlpha();
 	//Added By Ryan ENDED
 
-	/* (Tim) Color Dialog [START] */
-	double				getRColor();
-	double				getGColor();
-	double				getBColor();
-	double				getBrightnessColor();
-	/* (Tim) Color Dialog [END] */
-
-
 	void				setSize(int size);
 	//Added By Ryan STARTED
 	void				setLineWidth(int width);
@@ -89,6 +87,17 @@ public:
 	void cb_activation(int type);
 
 	//Added By Ryan ENDED
+
+	/* (Tim) Color Dialog [START] */
+	double				getRColor();
+	double				getGColor();
+	double				getBColor();
+	double				getBrightnessColor();
+	/* (Tim) Color Dialog [END] */
+
+	/* (Tim) Dissolve An Image Dialog [START] */
+	double				get_Dissolve_Alpha();
+	/* (Tim) Dissolve An Image Dialog [END] */
 
 private:
 	ImpressionistDoc*	m_pDoc;		// pointer to document to communicate with the document
@@ -107,6 +116,10 @@ private:
 	double m_nBColor;
 	double m_nBrightnessColor;
 	/* (Tim) Color Dialog [START] */
+
+	/* (Tim) Dissolve An Image Dialog [START] */
+	double m_nDissolve_Alpha;
+	/* (Tim) Dissolve An Image Dialog [END] */
 
 
 	// Static class members
@@ -135,7 +148,8 @@ private:
 	static void	cb_swap_canvas(Fl_Menu_* o, void* v);
 
 	// (Tim) Dissolve an image into the original image
-	static void cb_dissolve_image(Fl_Menu_* o, void* v);
+	static void cb_Dissolve_AlphaSlides(Fl_Widget* o, void* v);
+	static void cb_Dissolve_LoadImage(Fl_Widget* o, void* v);
 
 	//change the line Stroke_direction
 	static void cb_strokeDirection(Fl_Widget* o, void* v);
@@ -169,6 +183,7 @@ private:
 	static void	cb_paintly(Fl_Menu_* o, void* v);
 	static void	cb_load_edge_image(Fl_Menu_* o, void* v);
 	static void	cb_load_another_image(Fl_Menu_* o, void* v);
+	static void	cb_Dissolve(Fl_Menu_* o, void* v);
 
 	//Added By Ryan ENDED (File)
 

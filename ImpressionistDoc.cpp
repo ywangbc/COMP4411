@@ -414,7 +414,7 @@ int ImpressionistDoc::load_DissolveImage(char *iname)
 	}
 
 	// dissolve the images
-	double alpha = 0.5;
+	double alpha = m_pUI->get_Dissolve_Alpha();
 	for (int row = 0; row < height; ++row) {
 		for (int col = 0; col < width; ++col) {
 			for (int color = 0; color < 3; ++color) {

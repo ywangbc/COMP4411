@@ -245,6 +245,7 @@ void ImpressionistUI::cb_exit(Fl_Menu_* o, void* v)
 	whoami(o)->m_mainWindow->hide();
 	whoami(o)->m_brushDialog->hide();
 	whoami(o)->m_colorDialog->hide();
+	whoami(o)->m_DissolveDialog->hide();
 }
 
 //------------------------------------------------------------
@@ -280,22 +281,12 @@ void ImpressionistUI::cb_load_another_image(Fl_Menu_* o, void* v)
 }
 //Added By Ryan Ended (File)
 
-/* (Tim) Dissolve An Image into The Original Image [START] */
-void ImpressionistUI::cb_dissolve_image(Fl_Menu_* o, void* v)
+/* (Tim) Dissolve An Image Dialog [START] */
+void ImpressionistUI::cb_Dissolve(Fl_Menu_* o, void* v)
 {
-	ImpressionistDoc *pDoc=whoami(o)->getDocument();
-
-	if (!pDoc->m_ucBitmap) {
-		fl_alert("Please load a background image first.");
-		return;
-	}
-
-	char* newImage = fl_file_chooser("Dissolve Image?", "*.bmp", pDoc->getImageName() );
-	if (newImage != NULL) {
-		pDoc->load_DissolveImage(newImage);
-	}
+	whoami(o)->m_DissolveDialog->show();
 }
-/* (Tim) Dissolve An Image into The Original Image [END] */
+/* (Tim) Dissolve An Image Dialog [END] */
 
 //Added By Ryan Started (Display)
 void ImpressionistUI::cb_original_image(Fl_Menu_* o, void* v)
@@ -451,6 +442,30 @@ void ImpressionistUI::cb_brightnessColorSlides(Fl_Widget* o, void* v)
 }
 /* (Tim) Color Dialog [END] */
 
+/* (Tim) Dissolve An Image Dialog [START] */
+// choose alph
+void ImpressionistUI::cb_Dissolve_AlphaSlides(Fl_Widget* o, void* v)
+{
+	((ImpressionistUI*)(o->user_data()))->m_nDissolve_Alpha = ((Fl_Slider *)o)->value();
+}
+
+// choose image
+void ImpressionistUI::cb_Dissolve_LoadImage(Fl_Widget* o, void* v)
+{
+	ImpressionistDoc* pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
+
+	if (!pDoc->m_ucBitmap) {
+		fl_alert("Please load a background image first.");
+		return;
+	}
+
+	char* newImage = fl_file_chooser("Dissolve Image?", "*.bmp", pDoc->getImageName() );
+	if (newImage != NULL) {
+		pDoc->load_DissolveImage(newImage);
+	}
+}
+/* (Tim) Dissolve An Image Dialog [END] */
+
 //---------------------------------- per instance functions --------------------------------------
 
 //------------------------------------------------
@@ -538,6 +553,12 @@ double ImpressionistUI::getBrightnessColor()
 }
 /* (Tim) Color Dialog [END] */
 
+/* (Tim) Dissolve An Image Dialog [START] */
+double ImpressionistUI::get_Dissolve_Alpha() {
+	return m_nDissolve_Alpha;
+}
+/* (Tim) Dissolve An Image Dialog [END] */
+
 //-------------------------------------------------
 // Set the brush size
 //-------------------------------------------------
@@ -578,7 +599,7 @@ Fl_Menu_Item ImpressionistUI::menuitems[] = {
 		{ "&Load Image...",	FL_ALT + 'l', (Fl_Callback *)ImpressionistUI::cb_load_image },
 		{ "&Save Image...",	FL_ALT + 's', (Fl_Callback *)ImpressionistUI::cb_save_image },
 		{ "&Brushes...",	FL_ALT + 'b', (Fl_Callback *)ImpressionistUI::cb_brushes }, 
-		{ "&Undo",	FL_CTRL + 'z', (Fl_Callback *)ImpressionistUI::cb_undo }, 
+		{ "Undo",	FL_CTRL + 'z', (Fl_Callback *)ImpressionistUI::cb_undo }, 
 		{ "S&wap Canvas", FL_ALT + 'w', (Fl_Callback *)ImpressionistUI::cb_swap_canvas },
 		{ "&Clear Canvas", FL_ALT + 'c', (Fl_Callback *)ImpressionistUI::cb_clear_canvas, 0, FL_MENU_DIVIDER },
 
@@ -589,7 +610,7 @@ Fl_Menu_Item ImpressionistUI::menuitems[] = {
 		{ "Load Edge Image", FL_ALT+'e',(Fl_Callback *)ImpressionistUI::cb_load_edge_image},
 		{ "Load Another Image", FL_ALT+'a',(Fl_Callback *)ImpressionistUI::cb_load_another_image, 0, FL_MENU_DIVIDER},
 
-		{ "&Dissolve An Image", FL_ALT+'v',(Fl_Callback *)ImpressionistUI::cb_dissolve_image, 0, FL_MENU_DIVIDER },
+		{ "Dissol&ve An Image", FL_ALT+'v',(Fl_Callback *)ImpressionistUI::cb_Dissolve, 0, FL_MENU_DIVIDER },
 	//Added By Ryan Ended
 		
 		{ "&Quit",			FL_ALT + 'q', (Fl_Callback *)ImpressionistUI::cb_exit },
@@ -686,6 +707,10 @@ ImpressionistUI::ImpressionistUI() {
 	m_nBColor = 1.0;
 	m_nBrightnessColor = 1.0;
 	/* (Tim) Color Dialog [END] */
+
+	/* (Tim) Dissolve Image Dialog [START] */
+	m_nDissolve_Alpha = 0.5;
+	/* (Tim) Dissolve Image Dialog [END] */
 	// init values ENDED
 
 	// brush dialog definition
@@ -770,7 +795,7 @@ ImpressionistUI::ImpressionistUI() {
 		//Alpha slider to the dialog ENDED
 		//Added By Ryan ENDED
 
-    m_brushDialog->end();	
+    m_brushDialog->end();
 
 	/* (Tim) Color Dialog [START] */
 	m_colorDialog = new Fl_Window(412, 130, "Color Dialog");
@@ -823,6 +848,26 @@ ImpressionistUI::ImpressionistUI() {
 		m_brightnessColorSlider->callback(cb_brightnessColorSlides);
 	m_colorDialog->end();
 	/* (Tim) Color Dialog [END] */
+
+	/* (Tim) Dissolve An Image Dialog [START] */
+	m_DissolveDialog = new Fl_Window(360, 75, "Dissolve An Image Dialog");
+		m_Dissolve_AlphaSlider = new Fl_Value_Slider(10, 10, 300, 20, "Alpha");
+		m_Dissolve_AlphaSlider->user_data((void*)(this));	// record self to be used by static callback functions
+		m_Dissolve_AlphaSlider->type(FL_HOR_NICE_SLIDER);
+        m_Dissolve_AlphaSlider->labelfont(FL_COURIER);
+        m_Dissolve_AlphaSlider->labelsize(12);
+		m_Dissolve_AlphaSlider->minimum(0);
+		m_Dissolve_AlphaSlider->maximum(1.00);
+		m_Dissolve_AlphaSlider->step(0.01);
+		m_Dissolve_AlphaSlider->value(m_nDissolve_Alpha);
+		m_Dissolve_AlphaSlider->align(FL_ALIGN_RIGHT);
+		m_Dissolve_AlphaSlider->callback(cb_Dissolve_AlphaSlides);
+		
+		m_Dissolve_LoadImageButton = new Fl_Button(105,40,150,25,"Choose Image");
+		m_Dissolve_LoadImageButton->user_data((void*)(this));
+		m_Dissolve_LoadImageButton->callback(cb_Dissolve_LoadImage);
+	m_DissolveDialog->end();
+	/* (Tim) Dissolve An Image Dialog [END] */
 
 		this->m_StrokeDirectionChoice->deactivate();
 		this->m_LineWidthSlider->deactivate();
