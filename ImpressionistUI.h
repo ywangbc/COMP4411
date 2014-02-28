@@ -17,6 +17,7 @@
 #include <FL/Fl_Light_Button.H>
 #include <FL/Fl_Color_Chooser.H>
 #include <FL/Fl_Float_Input.H>
+#include <FL/Fl_Group.H>
 #include <cstdlib>
 
 #include "Impressionist.h"
@@ -47,6 +48,7 @@ public:
 	Fl_Slider*			m_LineWidthSlider;
 	Fl_Slider*			m_LineAngleSlider;
 	Fl_Slider*			m_AlphaSlider;
+	Fl_Slider*			m_ThresholdSlider;
 	//ADDED BY RYAN ENDED
 	Fl_Button*          m_ClearCanvasButton;
 
@@ -63,6 +65,12 @@ public:
 	Fl_Slider*			m_Dissolve_AlphaSlider;
 	Fl_Button*			m_Dissolve_LoadImageButton;
 	/* (Tim) Dissolve An Image Dialog [END] */
+
+	Fl_Light_Button *   m_bEdgeClip;
+
+	Fl_Group*			m_bEdgePack;
+
+	Fl_Button*			m_bDo;
 
 	// Member functions
 	void				setDocument(ImpressionistDoc* doc);
@@ -84,6 +92,13 @@ public:
 	//Added By Ryan STARTED
 	void				setLineWidth(int width);
 	void				setLineAngle(int angle);
+
+	//Control the threshold of edge pic
+	unsigned char		cb_getThreshold();
+	void				cb_setThreshold(unsigned char thre);
+	static void				cb_do(Fl_Widget* o, void* v);
+
+	//Control activation and deacivation of widgets
 	void cb_activation(int type);
 
 	//Added By Ryan ENDED
@@ -109,6 +124,9 @@ private:
 	int m_nLine_angle;
 	double m_nAlpha;
 	//Added By Ryan Ended 
+
+	//To control the treshold of edge image
+	unsigned char threshold;
 
 	/* (Tim) Color Dialog [START] */
 	double m_nRColor;
@@ -140,6 +158,8 @@ private:
 	static void	cb_about(Fl_Menu_* o, void* v);
 	static void	cb_brushChoice(Fl_Widget* o, void* v);
 	static void	cb_clear_canvas_button(Fl_Widget* o, void* v);
+	static void edgeClipControl(Fl_Widget* o, void* v);
+	
 
 		//Added By Ryan ENDED
 	
@@ -156,6 +176,9 @@ private:
 
 	//Callbacks for Brush Dialog STARTED
 	static void	cb_sizeSlides(Fl_Widget* o, void* v);
+
+	//Callback to control the threshold
+	static void cb_thresholdSlides(Fl_Widget* o, void* v);
 
 	//Added By Ryan STARTED
 

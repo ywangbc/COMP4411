@@ -35,9 +35,14 @@ ImpressionistDoc::ImpressionistDoc()
 	m_nWidth		= -1;
 	m_ucBitmap		= NULL;
 	m_ucPainting	= NULL;
+	m_ucBuffer		= NULL;
 	m_ucGray		= NULL;
 	m_ucBlur		= NULL;
 	m_ucAngle		=NULL;
+	m_ucTemp1		=NULL;
+	m_ucTemp2		=NULL;
+	m_ucEdgeHidden	=NULL;
+	m_ucEdge100		=NULL;
 	lineDirectPattern	=0; 
 
 
@@ -218,6 +223,11 @@ int ImpressionistDoc::loadImage(char *iname)
 	if (m_ucGray) delete [] m_ucGray; 
 	if (m_ucBlur) delete [] m_ucBlur;
 	if (m_ucAngle) delete [] m_ucAngle;
+	if (m_ucTemp1) delete [] m_ucTemp1;
+	if (m_ucTemp2) delete [] m_ucTemp2;
+	if (m_ucEdgeHidden) delete [] m_ucEdgeHidden;
+	if (m_ucEdge100) delete [] m_ucEdge100;
+	if (m_ucBuffer)	delete [] m_ucBuffer;
 
 	// empty Undo stack
 	while (!m_ucPainting_Undo.empty()) {
@@ -240,9 +250,16 @@ int ImpressionistDoc::loadImage(char *iname)
 	//allocate space to store the line anlge of each pixel
 	m_ucAngle		= new int [width*height];
 
+	m_ucTemp1		= new double [width*height*sizeof(double)];
+	m_ucTemp2		= new double [width*height*sizeof(double)];
+	m_ucEdgeHidden	= new unsigned char [width*height*3];
+	m_ucEdge100		= new unsigned char [width*height*3];
+	m_ucBuffer		= new unsigned char [width*height*3];
+
 	memset(m_ucPainting, 0, width*height*3);
 	memset(m_ucGray, 0, width*height*3);
 	memset(m_ucBlur, 0, width*height*3);
+	memset(m_ucBuffer, 0, width*height*3);
 	memset(m_ucAngle, 0, width*height*sizeof(int));
 
 	//Processing to get the Gray version
@@ -315,9 +332,63 @@ int ImpressionistDoc::loadImage(char *iname)
 			m_ucAngle[i+j*width]=angle;
 			
 		}
+	//Create temp1 using the first filter 
+	for(int j=1;j<height-1;j++)
+		for(int i=1;i<width-1;i++)
+		{
+			double sum=0;
+			for(int l=0;l<3;l++)
+				for(int k=0;k<3;k++)
+				{
+					int x=i-1+k;
+					int y=j-1+l;
 
+					sum+=(m_ucBlur[(x+y*width)*3]*kernel1[l][k]);
+				}
+			double blurVal=sum/9;
+			
+			for(int m=0;m<3;m++)
+			{
+				m_ucTemp1[(i+j*width)*3+m]=blurVal;
+			}
+		}
+	
+	//Create temp2 using the first filter 
+	for(int j=1;j<height-1;j++)
+		for(int i=1;i<width-1;i++)
+		{
+			double sum=0;
+			for(int l=0;l<3;l++)
+				for(int k=0;k<3;k++)
+				{
+					int x=i-1+k;
+					int y=j-1+l;
+
+					sum+=(m_ucBlur[(x+y*width)*3]*kernel2[l][k]);
+				}
+			double blurVal=sum/9;
+			
+			for(int m=0;m<3;m++)
+			{
+				m_ucTemp2[(i+j*width)*3+m]=blurVal;
+			}
+		}
+
+
+	//Creating the distance image of temp1 and temp2 
+	for(int j=1;j<height-1;j++)
+		for(int i=1;i<width-1;i++)
+		{
+			for(int m=0;m<3;m++)
+			{
+				double val1=m_ucTemp1[(i+j*width)*3+m];
+				double val2=m_ucTemp2[(i+j*width)*3+m];
+				m_ucEdgeHidden[(i+j*width)*3+m]= sqrt(val1*val1+val2*val2);
+			}
+		}
 	
 
+	
 
 
 	m_pUI->m_mainWindow->resize(m_pUI->m_mainWindow->x(), 
@@ -583,3 +654,38 @@ GLubyte* ImpressionistDoc::GetOriginalPixelAlpha(const Point p)
 	return GetOriginalPixelAlpha(p.x,p.y);
 }
 */
+unsigned char ImpressionistDoc::getThreshold()
+{
+	return m_pUI->cb_getThreshold();
+}
+void ImpressionistDoc::setThreshold(unsigned char thre)
+{
+	m_pUI->cb_setThreshold(thre);
+}
+
+void ImpressionistDoc::getThresholdImage()
+{
+	for(int j=1;j<m_nHeight-1;j++)
+		for(int i=1;i<m_nWidth-1;i++)
+		{
+			for(int m=0;m<3;m++)
+			{
+				unsigned char val=m_ucEdgeHidden[(i+j*m_nWidth)*3+m];
+				if(val>=getThreshold()) 
+				{
+					m_ucEdge100[(i+j*m_nWidth)*3+m]=255;
+				}
+				else
+				{
+					m_ucEdge100[(i+j*m_nWidth)*3+m]=0;
+				}
+			}
+		}
+
+	memcpy(m_ucBuffer,m_ucEdge100,3*m_nWidth*m_nHeight);
+	unsigned char* temp=m_ucBitmap;
+	m_ucBitmap = m_ucBuffer;
+	m_ucBuffer = temp;
+
+	m_pUI->m_origView->refresh();
+}

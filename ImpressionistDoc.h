@@ -39,12 +39,17 @@ public:
 	double		getAlpha();
 	//ADDED BY RYAN ENDED
 
+	unsigned char getThreshold();
+	void setThreshold(unsigned char thre);
+
 	/* (Tim) Color Dialog [START] */
 	double	getRColor();
 	double	getGColor();
 	double	getBColor();
 	double	getBrightnessColor();
 	/* (Tim) Color Dialog [END] */
+
+	void getThresholdImage();
 
 	void	setSize(int size);				// set the UI size
 	//ADDED BY RYAN STARTED
@@ -66,16 +71,26 @@ public:
 	// Bitmaps for original image and painting.
 	unsigned char*	m_ucBitmap;
 	unsigned char*	m_ucPainting;
+
+	unsigned char*	m_ucBuffer;
+
+
 	std::stack<unsigned char*>	m_ucPainting_Undo;
 
 	// The blurred image which contains intensity only
 	unsigned char* m_ucGray;
 	// Processed by box filter
 	unsigned char* m_ucBlur;
+
+	double*  m_ucTemp1;
+	double*  m_ucTemp2;
+	unsigned char*  m_ucEdgeHidden;
+	unsigned char*  m_ucEdge100;
 	// Store the line angle of each pixel
 	int* m_ucAngle;
 	//Store the direction of stroke
 	int lineDirectPattern;
+	
 
 	// The current active brush.
 	ImpBrush*			m_pCurrentBrush;	
