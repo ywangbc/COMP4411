@@ -86,6 +86,8 @@ public:
 	//Added By Ryan STARTED
 	void				setLineWidth(int width);
 	void				setLineAngle(int angle);
+	void cb_activation(int type);
+
 	//Added By Ryan ENDED
 
 private:
@@ -126,6 +128,8 @@ private:
 	static void	cb_brushChoice(Fl_Widget* o, void* v);
 	static void	cb_clear_canvas_button(Fl_Widget* o, void* v);
 
+		//Added By Ryan ENDED
+	
 
 	//(Tim)
 	static void	cb_swap_canvas(Fl_Menu_* o, void* v);

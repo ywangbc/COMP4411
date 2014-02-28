@@ -803,4 +803,34 @@ ImpressionistUI::ImpressionistUI() {
 		m_brightnessColorSlider->callback(cb_brightnessColorSlides);
 	m_colorDialog->end();
 	/* (Tim) Color Dialog [END] */
+
+		this->m_StrokeDirectionChoice->deactivate();
+		this->m_LineWidthSlider->deactivate();
+		this->m_LineAngleSlider->deactivate();
 }
+
+void ImpressionistUI::cb_activation(int type)
+{
+	switch(type)
+	{
+	case BRUSH_POINTS:
+	case BRUSH_CIRCLES:
+	case BRUSH_SCATTERED_POINTS:
+	case BRUSH_SCATTERED_CIRCLES:
+	case BRUSH_GREYSCALE:
+	case BRUSH_CONTRAST:
+		this->m_StrokeDirectionChoice->deactivate();
+		this->m_LineWidthSlider->deactivate();
+		this->m_LineAngleSlider->deactivate();
+	break;
+
+	case BRUSH_LINES:
+	case BRUSH_SCATTERED_LINES:
+		this->m_StrokeDirectionChoice->activate();
+		this->m_LineWidthSlider->activate();
+		this->m_LineAngleSlider->activate();
+	break;
+
+	}
+}
+

@@ -94,6 +94,7 @@ char* ImpressionistDoc::getImageName()
 void ImpressionistDoc::setBrushType(int type)
 {
 	m_pCurrentBrush	= ImpBrush::c_pBrushes[type];
+	m_pUI->cb_activation(type);
 }
 
 //---------------------------------------------------------
